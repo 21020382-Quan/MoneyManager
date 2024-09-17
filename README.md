@@ -23,7 +23,7 @@ Danh sách các chức năng chính:
     Quản lý các nguồn chi tiêu: Người dùng có thể tạo và giới hạn các nguồn chi tiêu hàng tháng. Cảnh báo người dùng khi nguồn chi tiêu vượt quá giới hạn.
   </li>
   <li>
-    Cá nhân hóa giao diên: Người dùng có thể thay đổi giao diện nền sáng, tối tùy sở thích.
+    Cá nhân hóa giao diện: Người dùng có thể thay đổi giao diện nền sáng, tối tùy sở thích.
   </li>
 
 </ul>
