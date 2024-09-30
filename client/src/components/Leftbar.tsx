@@ -11,7 +11,7 @@ export default function Leftbar() {
                 <div>MoneyManager</div>
             </div>
             <div className='flex flex-col gap-2 w-full h-full pt-3'>
-                <LeftbarItem icon={LayoutDashboard} link='/'>Dashboard</LeftbarItem>
+                <LeftbarItem icon={LayoutDashboard} link='/dashboard'>Dashboard</LeftbarItem>
                 <LeftbarItem icon={ArrowLeftRight} link='/transactions'>Transactions</LeftbarItem>
                 <LeftbarItem icon={Target} link='/plan'>Plan</LeftbarItem>
                 <LeftbarItem icon={Wallet} link='/budget'>Budget</LeftbarItem>
