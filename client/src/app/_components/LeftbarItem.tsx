@@ -1,7 +1,5 @@
-'use client'
-
 import { LucideIcon } from "lucide-react"
-import { Button, ButtonProps } from "./ui/button"
+import { Button, ButtonProps } from "../../components/ui/button"
 import Link from "next/link"
 
 interface LeftbarItemProps extends ButtonProps {
