@@ -22,7 +22,7 @@ export default function MainLayout({
   return (
     <>
       <Leftbar />
-      <div className='ml-[300px] mr-[300px] p-4'>{children}</div>
+      <div className='ml-60 mr-60 p-4'>{children}</div>
       <Rightbar />
     </>
   );
