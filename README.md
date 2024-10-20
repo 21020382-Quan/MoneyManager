@@ -25,5 +25,5 @@ Danh sách các chức năng chính:
   <li>
     Cá nhân hóa giao diện: Người dùng có thể thay đổi giao diện nền sáng, tối tùy sở thích.
   </li>
-
+<div>link to backend: <a>https://github.com/21020382-Quan/MoneyManager-api</a></div>
 </ul>
