@@ -19,7 +19,7 @@ export default function LeftbarItem({
   return (
     <Link href={link}>
       <Button className={`
-        w-full gap-2 text-lg justify-start hover:text-blue-500 hover:bg-blue-100
+        w-full gap-2 text-md justify-start hover:text-blue-500 hover:bg-blue-100
         ${pathname === link && 'text-blue-500 bg-blue-100'}`} 
         variant='ghost' 
       >

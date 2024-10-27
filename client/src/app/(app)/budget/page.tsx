@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,19 +12,32 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import EmojiPicker from 'emoji-picker-react';
+import { useState } from "react";
 
 export default function Budget() {
+  const [emoji, setEmoji] = useState();
+  const [openEmoji, setOpenEmoji] = useState(false);
+  const [name, setName] = useState<string>();
+  const [amount, setAmount] = useState<string>();
+
+  const handleSelectEmoji = (e: any) => {
+    setEmoji(e.emoji);
+    setOpenEmoji(false);
+  }
+
   return (
     <div className="relative"
-      style={{minHeight: 'calc(100vh - 64px)'}}>
-      <div>Budget</div>
+      style={{minHeight: 'calc(100vh - 96px)'}}>
+      <div>
+        <h1 className='font-bold text-3xl'>All budgets</h1>
+      </div>
       <Dialog>
       <DialogTrigger asChild>
         <Button
-          className="hover:text-blue-500 hover:bg-blue-100 hover:border-blue-500 border border-black rounded-full absolute right-4 bottom-4 font-bold text-xl w-12 h-12 flex items-center justify-center"
-          variant="ghost"
+          className="bg-blue-500 hover:bg-blue-300 border rounded-xl absolute right-4 bottom-4 font-bold text-xl w-auto h-auto flex items-center justify-center"
         >
-          +
+          + Add new budget
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -34,13 +49,24 @@ export default function Budget() {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="icon" className="text-right">
+              Icon:
+            </Label>
+            <Button variant="outline" onClick={() => setOpenEmoji(true)}>{emoji}</Button>
+            <div className="col-span-3 absolute top-10">
+              <EmojiPicker className='z-10' open={openEmoji} onEmojiClick={handleSelectEmoji} />
+            </div>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
               Name:
             </Label>
             <Input
               id="name"
-              placeholder="Your budget name (Ex: Shopping)"
+              placeholder="Your budget name"
               className="col-span-3"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -48,17 +74,25 @@ export default function Budget() {
               Amount:
             </Label>
             <Input
+              type="number"
               id="amount"
-              placeholder="Your budget amount (Ex: 10000)"
+              placeholder="Your budget amount"
               className="col-span-3"
+              onChange={(e) => setAmount(e.target.value)}
+              value={amount}
             />
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" variant='ghost' className='border rounded-full border-black hover:text-blue-500 hover:bg-blue-100 hover:border-blue-500'>Save changes</Button>
+          <Button
+            disabled={!(name && amount && emoji)}
+            type="submit"   
+            className='bg-blue-500 hover:bg-blue-300 border rounded-full'>
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
-    </Dialog>
+      </Dialog>
     </div>
   );
 }
