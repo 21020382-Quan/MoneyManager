@@ -5,14 +5,8 @@ import LeftbarItem from "./LeftbarItem"
 import Image from "next/image"
 import { UserButton } from "@clerk/nextjs"
 
-interface LeftbarItemProps {
-  icon: LucideIcon;
-  link: string;
-  title: string;
-}
-
 export default function Leftbar() {
-  const items: LeftbarItemProps[] = [
+  const items = [
     {
       icon: LayoutDashboard,
       link: '/dashboard',
