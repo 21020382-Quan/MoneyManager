@@ -1,4 +1,10 @@
 import React from 'react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface BudgetItemProps {
   emoji: string;
@@ -14,14 +20,21 @@ interface BudgetProps {
 
 export default function BudgetItem({budget} : BudgetProps) {
   return (
-    <div className="p-4 border rounded-lg min-w-[300px] max-w-[300px] min-h-[150px] max-h-[150px] hover:shadow-md flex flex-col justify-between">
+    <div className="p-4 border rounded-lg min-w-[300px] max-w-[300px] min-h-[150px] max-h-[150px] hover:bg-blue-100 flex flex-col justify-between transition-colors duration-120">
       <div className="flex items-center justify-between">
         <div className="flex gap-2 items-center max-w-[150px] overflow-clip">
-          <div className="p-2 bg-blue-100 rounded-full text-xl">
+          <div className="p-2 bg-slate-300 rounded-full text-xl">
             {budget.emoji}
           </div>
           <div>
-            <h2 className="font-bold">{budget.name}</h2>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="font-bold hover:cursor-text select-text">{budget.name}</TooltipTrigger>
+                <TooltipContent>
+                  <p>{budget.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <p className="text-sm">{budget.transactions} transactions</p>
           </div>
         </div>
