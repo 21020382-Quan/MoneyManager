@@ -63,7 +63,7 @@ export default function Page() {
               </h1>
             </div>
 
-            <SignIn 
+            <SignIn
               appearance={{
                 elements: {
                   formButtonPrimary: 'bg-blue-500 hover:bg-blue-400 text-sm',
