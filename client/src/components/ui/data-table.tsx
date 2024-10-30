@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button"
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -30,6 +32,7 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select"
+import { Input } from "./input"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -41,6 +44,7 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const table = useReactTable({
     data,
     columns,
@@ -48,13 +52,27 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   })
-
+  const isFiltered = table.getState().columnFilters.length > 0;
+  const budgets = table.getColumn("budget")?.getFacetedUniqueValues()
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Search transactions by description..."
+          value={(table.getColumn("description")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("description")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="border">
         <Table>
           <TableHeader className="bg-blue-500">
