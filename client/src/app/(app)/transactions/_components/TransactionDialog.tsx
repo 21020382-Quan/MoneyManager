@@ -10,107 +10,91 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '@radix-ui/react-dialog';
-import EmojiPicker from 'emoji-picker-react';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
-export default function BudgetDialog() {
-  const [emoji, setEmoji] = useState<string>('');
-  const [openEmoji, setOpenEmoji] = useState(false);
-  const [name, setName] = useState<string>('');
+export default function TransactionDialog() {
+  const [budget, setBudget] = useState<string>();
+  const [description, setDescription] = useState<string>();
   const [amount, setAmount] = useState<number | undefined>();
-  const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const {toast} = useToast();
-  console.log(emoji);
+  console.log(budget);
 
-  const handleSelectEmoji = (e: { emoji: string }) => {
-    setEmoji(e.emoji);
-    setOpenEmoji(false);
-  }
-
-  const closeEmojiPicker = (e: MouseEvent) => {
-    if (
-      emojiPickerRef.current &&
-      !emojiPickerRef.current.contains(e.target as Node)
-    ) {
-      setOpenEmoji(false);
-    }
-  };
-
-  const openEmojiPicker = () => {
-    setOpenEmoji(true);
-  };
+  const budgets = [
+    "Shopping",
+    "Memberships",
+    "Food",
+  ]
 
   const handleCreateBudget = () => {
     // TODO: send data to server
     const result = true;
-    setOpenEmoji(false);
-    setEmoji('');
-    setName('');
+    setBudget('');
+    setDescription('');
     setAmount(0);
     if (result) {
       toast({
-        title: "Create budget successfully!",
+        title: "Add expense successfully!",
         duration: 3000,
         className: "border-none bg-[#5cb85c] text-white",
       })
     } else {
       toast({
-        title: "Create budget failed!",
+        title: "Add expense failed!",
         duration: 3000,
         className: "border-none bg-[#d9534f] text-white",
       })
     }
   }
 
-  useEffect(() => {
-    if (openEmoji) {
-      document.addEventListener('mousedown', closeEmojiPicker);
-    }
-    return () => {
-      document.removeEventListener('mousedown', closeEmojiPicker);
-    };
-  }, [openEmoji]);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="bg-blue-500 hover:bg-blue-300 border rounded-xl absolute right-4 bottom-4 font-bold text-xl w-auto h-auto flex items-center justify-center">
-          + Add new budget
+          + Add a transaction
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add a budget</DialogTitle>
-          <DialogDescription>Create a new budget to manage your expenses</DialogDescription>
+          <DialogTitle>Add a transaction</DialogTitle>
+          <DialogDescription>Create a transaction and put it in the corresponding budget</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="icon" className="text-right">
-              Icon:
+            <Label htmlFor="budget" className="text-right">
+              Budget:
             </Label>
-            <Button variant="outline" onClick={openEmojiPicker}>
-              {emoji}
-            </Button>
-            {openEmoji && (
-              <div className="absolute top-10" ref={emojiPickerRef}>
-                <EmojiPicker className="z-10" onEmojiClick={handleSelectEmoji} />
-              </div>
-            )}
+            <Select value={budget} onValueChange={setBudget}>
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="Select a budget" />
+              </SelectTrigger>
+              <SelectContent>
+                {budgets.map((budget, index) => (
+                  <SelectItem value={budget} key={index}>{budget}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name:
+            <Label htmlFor="description" className="text-right">
+              Description:
             </Label>
             <Input
-              id="name"
-              placeholder="Budget Name"
+              id="description"
+              placeholder="Description"
               className="col-span-3"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -120,7 +104,7 @@ export default function BudgetDialog() {
             <Input
               type="number"
               id="amount"
-              placeholder="Budget amount"
+              placeholder="Amount"
               className="col-span-3"
               onChange={(e) => setAmount(Number(e.target.value))}
               value={amount}
@@ -130,7 +114,7 @@ export default function BudgetDialog() {
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              disabled={!(name && amount && emoji)}
+              disabled={!(budget && description && amount)}
               type="submit"
               className="bg-blue-500 hover:bg-blue-300 border rounded-full"
               onClick={handleCreateBudget}
