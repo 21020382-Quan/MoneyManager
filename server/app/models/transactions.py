@@ -7,15 +7,13 @@ class TransactionBase(SQLModel):
 
 class Transaction(TransactionBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    description: str
-    date: datetime
-    value: int
-    category_id: int
-    is_notified: bool
-    user_id: int
-    wallet_id: int
-    name: str
-    image: str
+    user_id: int = Field(default=None, foreign_key="user.id")
+    description: str 
+    amount: int | None 
+    date: datetime = Field(default=datetime.now())
+    budget_id: int = Field(default=None, foreign_key="budget.id")
+    user: "User" = Relationship(back_populates="transactions")
+    budget: "Budget" = Relationship(back_populates="transaction")
 
     class Config:
         from_attributes = True

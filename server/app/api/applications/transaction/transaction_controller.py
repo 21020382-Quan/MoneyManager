@@ -30,18 +30,14 @@ def update_transaction(session: Session, transaction_id: int, data: Transaction)
   return db_transaction
 
 def create_transaction(session: Session, data: Transaction) -> Transaction: 
-  transaction = session.exec(select(Transaction).where(Transaction.name == data.name)).first()
+  transaction = session.exec(select(Transaction).where(Transaction.user_id == data.user_id)).first()
   transaction = Transaction(
-    description=data.description,
-    date=data.date, 
-    value=data.value,
-    category_id=data.category_id,
-    is_notified=data.is_notified,
-    user_id=data.user_id, 
-    wallet_id=data.wallet_id, 
-    name=data.name, 
-    image=data.image,
-  )
+        user_id=data.user_id,
+        budget_id=data.budget_id,
+        description=data.description,
+        amount=data.amount,
+        date=data.date 
+    )
   session.add(transaction)
   session.commit()
   session.refresh(transaction)
