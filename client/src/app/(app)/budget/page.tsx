@@ -40,7 +40,7 @@ export default function Budget() {
       <div>
         <h1 className="font-bold text-3xl">All budgets</h1>
       </div>
-      <div className="mt-12 flex flex-wrap gap-4 justify-around">
+      <div className="mt-8 flex flex-wrap gap-4 justify-around">
         {budgets.map((budget, index) => (
           <BudgetItem budget={budget} key={index} />
         ))}
