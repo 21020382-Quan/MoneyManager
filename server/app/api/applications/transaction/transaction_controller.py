@@ -3,6 +3,7 @@ from fastapi import File, HTTPException, UploadFile
 from models.transactions import Transaction
 from sqlmodel import Session, select
 from core.config import settings
+from app.models.users import User
 
 def read_transaction(session: Session, transaction_id: int) -> Transaction:
   db_transaction = session.get(Transaction, transaction_id)
@@ -30,18 +31,15 @@ def update_transaction(session: Session, transaction_id: int, data: Transaction)
   return db_transaction
 
 def create_transaction(session: Session, data: Transaction) -> Transaction: 
-  transaction = session.exec(select(Transaction).where(Transaction.name == data.name)).first()
+  user = session.exec(select(User).where(User.id == data.user_id)).first()
   transaction = Transaction(
-    description=data.description,
-    date=data.date, 
-    value=data.value,
-    category_id=data.category_id,
-    is_notified=data.is_notified,
-    user_id=data.user_id, 
-    wallet_id=data.wallet_id, 
-    name=data.name, 
-    image=data.image,
-  )
+        user_id=data.user_id,
+        user = data.user,
+        budget_id=data.budget_id,
+        description=data.description,
+        amount=data.amount,
+        date=data.date 
+    )
   session.add(transaction)
   session.commit()
   session.refresh(transaction)

@@ -5,7 +5,7 @@ docker compose -f "docker-compose.yml" up -d --build
 ```
 Create a Migration Script
 ```
-alembic revision -m "create int table" --autogenerate
+alembic revision -m "data pairing" --autogenerate
 ```
 Run migrations
 ```
