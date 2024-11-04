@@ -17,3 +17,9 @@ class Budget(BudgetBase, table=True):
 
     class Config:
         from_attributes = True
+
+class BudgetOut(BudgetBase): 
+    id: int 
+    icon: str 
+    name: str 
+    amount: int 
