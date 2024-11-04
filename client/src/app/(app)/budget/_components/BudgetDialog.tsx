@@ -24,7 +24,6 @@ export default function BudgetDialog() {
   const [amount, setAmount] = useState<number | undefined>();
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const {toast} = useToast();
-  console.log(emoji);
 
   const handleSelectEmoji = (e: { emoji: string }) => {
     setEmoji(e.emoji);

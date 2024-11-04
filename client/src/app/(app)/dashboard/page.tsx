@@ -1,11 +1,12 @@
 import SpendingCard from "@/app/_components/SpendingCard";
+import getUser, { User } from "@/lib/user";
 
 interface SpendingCardProps {
   title: string
   amount: number
 }
 
-export default function Dashboard() {
+export default async function Dashboard() {
   const cardsInfo: SpendingCardProps[] = [
     {
       title: "Today's spending",
@@ -24,6 +25,7 @@ export default function Dashboard() {
       amount: 1000000,
     },
   ]
+  const user = getUser();
     return (
       <>
         <div className='flex flex-wrap gap-4 justify-around'>
