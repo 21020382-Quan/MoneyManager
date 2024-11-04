@@ -21,3 +21,7 @@ class User(UserBase, table=True):
 
     class Config:
         from_attributes = True
+
+class UserOut(UserBase): 
+    id: int 
+    email: str

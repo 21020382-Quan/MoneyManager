@@ -1,6 +1,6 @@
 import base64
 from fastapi import File, HTTPException, UploadFile
-from app.models.users import User
+from models.users import User
 from sqlmodel import Session, select
 from core.config import settings
 
@@ -32,23 +32,28 @@ def update_user(
 
     return db_user
 
-# def create_user(session: Session, data_in: User) -> User:
-#   user = session.exec(select(User).where(User.email == data_in.email)).first()
-#   if user:
-#     raise HTTPException(status_code=400, detail="User name already registered")
+def create_user(session: Session, data_in: User) -> User:
+  user = session.exec(select(User).where(User.email == data_in.email)).first()
+  if user:
+    raise HTTPException(status_code=400, detail="User name already registered")
 
-#   if "@" not in data_in.email:
-#     raise HTTPException(status_code=400, detail="Invalid email address")
+  if "@" not in data_in.email:
+    raise HTTPException(status_code=400, detail="Invalid email address")
 
-#   user = session.exec(select(User).where(User.email == data_in.email)).first()
-#   if user:
-#     raise HTTPException(status_code=400, detail="Email address already registered")
+  user = session.exec(select(User).where(User.email == data_in.email)).first()
+  if user:
+    raise HTTPException(status_code=400, detail="Email address already registered")
 
-#   user = User(
-#     email=data_in.email,
-#   )
-#   session.add(user)
-#   session.commit()
-#   session.refresh(user)
+  user = User(
+    email=data_in.email,
+    clerkUserId=data_in.clerkUserId,
+    name=data_in.name,
+    imageUrl=data_in.imageUrl, 
+    createdAt=data_in.createdAt, 
+    updatedAt=data_in.updatedAt
+  )
+  session.add(user)
+  session.commit()
+  session.refresh(user)
 
-#   return user
+  return user
