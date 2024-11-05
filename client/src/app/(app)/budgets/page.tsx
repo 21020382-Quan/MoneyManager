@@ -11,7 +11,7 @@ interface BudgetItemProps {
   totalSpent: number;
 };
 
-export default function Budget() {
+export default function Budgets() {
   const budgets: BudgetItemProps[] = [
     {
       emoji: '🛍️',

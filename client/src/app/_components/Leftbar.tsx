@@ -14,8 +14,8 @@ export default function Leftbar() {
     },
     {
       icon: Wallet,
-      link: '/budget',
-      title: 'Budget',
+      link: '/budgets',
+      title: 'Budgets',
     },
     {
       icon: ArrowLeftRight,
