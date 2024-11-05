@@ -43,20 +43,31 @@ export default function BudgetDialog() {
     setOpenEmoji(true);
   };
 
-  const handleCreateBudget = () => {
+  const handleCreateBudget = async () => {
     // TODO: send data to server
-    const result = true;
-    setOpenEmoji(false);
-    setEmoji('');
-    setName('');
-    setAmount(0);
-    if (result) {
+    const data = {
+      emoji,
+      name,
+      amount
+    }
+    try {
+      const response = await fetch("http://localhost:8080/wallet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      setOpenEmoji(false);
+      setEmoji('');
+      setName('');
+      setAmount(0);
       toast({
         title: "Create budget successfully!",
         duration: 3000,
         className: "border-none bg-[#5cb85c] text-white",
       })
-    } else {
+    } catch (error) {
       toast({
         title: "Create budget failed!",
         duration: 3000,

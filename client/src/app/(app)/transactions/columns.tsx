@@ -9,12 +9,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { ArrowUpDown } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
+import { toLocalMoney } from "@/lib/utils"
  
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -57,12 +56,7 @@ export const columns: ColumnDef<Payment>[] = [
     ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"))
-      const formatted = new Intl.NumberFormat("vn-VN", {
-        style: "currency",
-        currency: "VND",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(amount)
+      const formatted = toLocalMoney(amount);
  
       return <div className="font-medium">{formatted}</div>
     },

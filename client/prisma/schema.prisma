@@ -11,9 +11,9 @@ model user {
   id          Int      @id @default(autoincrement())
   email       String   @db.VarChar
   clerkUserId String   @unique
-  name        String?
-  imageUrl    String?
   createdAt   DateTime @default(now())
+  imageUrl    String?
+  name        String?
   updatedAt   DateTime @updatedAt
 }
 
