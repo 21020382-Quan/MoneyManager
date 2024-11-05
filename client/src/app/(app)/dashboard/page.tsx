@@ -1,4 +1,4 @@
-import SpendingCard from "@/app/_components/SpendingCard";
+import SpendingCard from "@/app/(app)/dashboard/_components/SpendingCard";
 import getUser, { User } from "@/lib/user";
 
 interface SpendingCardProps {
