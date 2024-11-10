@@ -16,8 +16,8 @@ def create_budget(session: SessionDep, budget: BudgetIn):
   return budgetController.create_budget(session, budget)
 
 @router.get('/get_all_budgets')
-def get_all_budgets(session: SessionDep, skip: int = 0, limit: int = settings.RECORD_LIMIT) -> BudgetListOut: 
-  return budgetController.read_all_budgets(session, skip, limit)
+def get_all_budgets(session: SessionDep) -> BudgetListOut: 
+  return budgetController.read_all_budgets(session)
 
 @router.delete('/delete/{budget_id}')
 def delete_budget(session: SessionDep, budget_id: int):
