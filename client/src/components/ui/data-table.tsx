@@ -59,8 +59,6 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   })
-  const isFiltered = table.getState().columnFilters.length > 0;
-  const budgets = table.getColumn("budget")?.getFacetedUniqueValues()
   return (
     <div>
       <div className="flex items-center py-4">

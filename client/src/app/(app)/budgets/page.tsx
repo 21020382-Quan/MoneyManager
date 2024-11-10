@@ -1,5 +1,3 @@
-'use client';
-
 import BudgetDialog from './_components/BudgetDialog';
 import BudgetItem, { BudgetItemProps } from './_components/BudgetItem';
 

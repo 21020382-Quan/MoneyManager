@@ -2,13 +2,6 @@ import { DataTable } from "@/components/ui/data-table";
 import TransactionDialog from "./_components/TransactionDialog";
 import { Payment, columns } from "./columns";
 
-interface TransactionItemProps {
-  budget: string;
-  description: string;
-  amount: number;
-  date: string;
-}
-
 export default async function Transactions() {
   const fetchData = async (): Promise<Payment[]> => {
     return [

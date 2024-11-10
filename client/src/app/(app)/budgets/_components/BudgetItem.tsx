@@ -5,7 +5,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { toLocalMoney } from '@/lib/utils';
+import { cn, toLocalMoney } from '@/lib/utils';
+import { BudgetTransaction } from '../[id]/columns';
 
 export type BudgetItemProps = {
   emoji: string;
@@ -13,15 +14,16 @@ export type BudgetItemProps = {
   transactions: number;
   amount: number;
   totalSpent: number;
+  transactionsList?: BudgetTransaction[];
 };
 
-interface BudgetProps {
+interface BudgetProps extends React.HTMLAttributes<HTMLDivElement> {
   budget: BudgetItemProps;
 };
 
-export default function BudgetItem({budget} : BudgetProps) {
+export default function BudgetItem({budget, className} : BudgetProps) {
   return (
-    <div className="p-4 border rounded-lg min-w-[300px] max-w-[300px] min-h-[150px] max-h-[150px] hover:bg-blue-100 flex flex-col justify-between transition-colors duration-120">
+    <div className={cn("p-4 border rounded-lg w-[300px] h-[150px] hover:bg-blue-100 flex flex-col justify-between transition-colors duration-120", className)}>
       <div className="flex items-center justify-between">
         <div className="flex gap-2 items-center max-w-[150px] overflow-clip">
           <div className="p-2 bg-slate-300 rounded-full text-xl">

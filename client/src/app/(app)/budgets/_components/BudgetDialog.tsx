@@ -65,7 +65,7 @@ export default function BudgetDialog() {
       toast({
         title: "Create budget successfully!",
         duration: 3000,
-        className: "border-none bg-[#5cb85c] text-white",
+        className: "border-none bg-green-500 text-white",
       })
     } catch (error) {
       console.log(error);
@@ -73,7 +73,7 @@ export default function BudgetDialog() {
         title: `Create budget failed!
                 Error: ${error}`,
         duration: 3000,
-        className: "border-none bg-[#d9534f] text-white",
+        className: "border-none bg-red-500 text-white",
       })
     }
   }
