@@ -61,8 +61,7 @@ def create_budget(session: Session, data: BudgetIn) -> Budget:
   budget = Budget(
     icon=data.icon, 
     name=data.name, 
-    amount=data.amount, 
-    total_spent=data.total_spent, 
+    amount=data.amount
   )
   session.add(budget)
   session.commit()

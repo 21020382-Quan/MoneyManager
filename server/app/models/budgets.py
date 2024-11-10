@@ -5,7 +5,6 @@ from sqlmodel import Field, Relationship, SQLModel
 class BudgetBase(SQLModel):
     pass
 
-# Database model, database table inferred from class name
 class Budget(BudgetBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     icon: str
@@ -34,7 +33,6 @@ class BudgetIn(BudgetBase):
     icon: str
     name: str
     amount: int
-    total_spent: int
 
 class BudgetListOut(SQLModel): 
     data: list[Budget]
