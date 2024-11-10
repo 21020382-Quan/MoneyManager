@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from api.deps import SessionDep
 import api.applications.transaction.transaction_controller as TransactionController
-from models.transactions import Transaction
+from app.models.transactions import Transaction, TransactionOut
 
 router = APIRouter()
 

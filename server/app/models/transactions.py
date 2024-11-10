@@ -2,6 +2,9 @@ from datetime import datetime
 
 from sqlmodel import Field, Relationship, SQLModel
 
+from app.models.users import User, UserOut
+from app.models.budgets import Budget, BudgetOut
+
 class TransactionBase(SQLModel):
     pass
 
@@ -17,3 +20,16 @@ class Transaction(TransactionBase, table=True):
 
     class Config:
         from_attributes = True
+
+class TransactionOut(TransactionBase): 
+    id: int 
+    description: str
+    amount: int 
+    budget: BudgetOut
+    user: UserOut
+
+class TransactionIn(TransactionBase): 
+    user_id: int
+    budget_id: int
+    description: str
+    amount: int
