@@ -16,7 +16,7 @@ class Transaction(TransactionBase, table=True):
     date: datetime = Field(default=datetime.now())
     budget_id: int = Field(default=None, foreign_key="budget.id")
     user: "User" = Relationship(back_populates="transactions")
-    budget: "Budget" = Relationship(back_populates="transaction")
+    budget: "Budget" = Relationship(back_populates="transactions")
 
     class Config:
         from_attributes = True

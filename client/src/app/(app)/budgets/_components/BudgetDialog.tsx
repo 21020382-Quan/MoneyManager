@@ -18,7 +18,7 @@ import EmojiPicker from 'emoji-picker-react';
 import { useEffect, useRef, useState } from 'react';
 
 export default function BudgetDialog() {
-  const [emoji, setEmoji] = useState<string>('');
+  const [icon, setEmoji] = useState<string>('');
   const [openEmoji, setOpenEmoji] = useState(false);
   const [name, setName] = useState<string>('');
   const [amount, setAmount] = useState<number>(0);
@@ -46,12 +46,13 @@ export default function BudgetDialog() {
   const handleCreateBudget = async () => {
     // TODO: send data to server
     const data = {
-      emoji,
+      icon,
       name,
       amount
     }
     try {
-      const response = await fetch("http://localhost:8081/budget", {
+      const response = await fetch("http://localhost:8081/api/v1/budget/", {
+        mode: 'no-cors',    
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +106,7 @@ export default function BudgetDialog() {
               Icon:
             </Label>
             <Button variant="outline" onClick={openEmojiPicker}>
-              {emoji}
+              {icon}
             </Button>
             {openEmoji && (
               <div className="absolute top-10" ref={emojiPickerRef}>
@@ -142,7 +143,7 @@ export default function BudgetDialog() {
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              disabled={!(name && amount && emoji)}
+              disabled={!(name && amount && icon)}
               type="submit"
               className="bg-blue-500 hover:bg-blue-300 border rounded-full"
               onClick={handleCreateBudget}
