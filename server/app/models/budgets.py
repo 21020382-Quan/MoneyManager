@@ -11,9 +11,14 @@ class Budget(BudgetBase, table=True):
     icon: str
     name: str
     amount: int
-    transaction: list["Transaction"] = Relationship(
+    total_spent: int
+    transactions: list["Transaction"] = Relationship(
         back_populates="budget", sa_relationship_kwargs={"cascade": "all, delete"}
     )
+    transaction: int = Field(default=0)
+
+    def update_transaction_count(self):
+        self.transaction = len(self.transactions)
 
     class Config:
         from_attributes = True
@@ -23,8 +28,14 @@ class BudgetOut(BudgetBase):
     icon: str
     name: str
     amount: int
+    total_spent: int
 
 class BudgetIn(BudgetBase):
     icon: str
     name: str
     amount: int
+    total_spent: int
+
+class BudgetListOut(SQLModel): 
+    data: list[Budget]
+    count: int

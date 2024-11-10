@@ -1,7 +1,7 @@
 import base64
 from fastapi import File, HTTPException, UploadFile
-from app.models.budgets import Budget, BudgetIn
-from sqlmodel import Session, select
+from app.models.budgets import Budget, BudgetIn, BudgetListOut
+from sqlmodel import Session, select, func
 from core.config import settings
 
 def read_budget(session: Session, budget_id: int) -> Budget:
@@ -9,6 +9,34 @@ def read_budget(session: Session, budget_id: int) -> Budget:
   if not db_budget:
     raise HTTPException(status_code=404, detail="budget not found")
   return db_budget
+
+def read_all_budgets(session: Session, skip: int = 0, limit: int = settings.RECORD_LIMIT) -> BudgetListOut:
+  count_statement = select(func.count(Budget.id)).select_from(Budget)
+  count = session.exec(count_statement).one()
+
+  db_budgets = session.exec(select(Budget).offset(skip).limit(limit)).all()
+  response_data = []
+  bg_list_id = [factor.id for factor in db_budgets if factor.id]
+  db_list_budgets = session.exec(
+      select(Budget).where(Budget.id.in_(bg_list_id))
+  ).all()
+
+  list_budgets_map = {
+      budget.id: budget for budget in db_list_budgets
+  }
+
+  for budget in db_budgets:
+      if budget.id:
+          response_data.append(
+              {
+                  **budget.model_dump(),
+                  "budget": list_budgets_map[budget.id].model_dump(),
+              }
+          )
+          print(response_data)
+      else:
+          response_data.append(budget.model_dump())
+  return BudgetListOut(data=response_data, count=count)
 
 def delete_budget(session: Session, budget_id: int):
   db_budget = session.get(Budget, budget_id)
@@ -33,7 +61,8 @@ def create_budget(session: Session, data: BudgetIn) -> Budget:
   budget = Budget(
     icon=data.icon, 
     name=data.name, 
-    amount=data.amount,
+    amount=data.amount, 
+    total_spent=data.total_spent, 
   )
   session.add(budget)
   session.commit()
