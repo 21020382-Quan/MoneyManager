@@ -17,21 +17,14 @@ import { toLocalMoney } from "@/lib/utils"
  
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Transaction = {
+export type BudgetPayment = {
   id: string
-  budget: string
   description: string
   date: Date
   amount: number
 }
  
-export const columns: ColumnDef<Transaction>[] = [
-  {
-    accessorKey: "budget",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Budget" />
-    ),
-  },
+export const columns: ColumnDef<BudgetPayment>[] = [
   {
     accessorKey: "description",
     header: ({ column }) => (

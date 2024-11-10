@@ -21,7 +21,7 @@ export default function BudgetDialog() {
   const [icon, setEmoji] = useState<string>('');
   const [openEmoji, setOpenEmoji] = useState(false);
   const [name, setName] = useState<string>('');
-  const [amount, setAmount] = useState<number | undefined>();
+  const [amount, setAmount] = useState<number>(0);
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const {toast} = useToast();
 
@@ -66,13 +66,15 @@ export default function BudgetDialog() {
       toast({
         title: "Create budget successfully!",
         duration: 3000,
-        className: "border-none bg-[#5cb85c] text-white",
+        className: "border-none bg-green-500 text-white",
       })
     } catch (error) {
+      console.log(error);
       toast({
-        title: "Create budget failed!",
+        title: `Create budget failed!
+                Error: ${error}`,
         duration: 3000,
-        className: "border-none bg-[#d9534f] text-white",
+        className: "border-none bg-red-500 text-white",
       })
     }
   }
@@ -134,7 +136,7 @@ export default function BudgetDialog() {
               placeholder="Budget amount"
               className="col-span-3"
               onChange={(e) => setAmount(Number(e.target.value))}
-              value={amount}
+              value={amount || ''}
             />
           </div>
         </div>

@@ -8,38 +8,29 @@ datasource db {
 }
 
 model user {
-  id          Int      @id @default(autoincrement())
-  email       String   @db.VarChar
-  clerkUserId String   @unique
-  createdAt   DateTime @default(now())
-  imageUrl    String?
-  name        String?
-  updatedAt   DateTime @updatedAt
+  id          Int           @id @default(autoincrement())
+  email       String        @db.VarChar
+  clerkUserId String        @db.VarChar
+  name        String        @db.VarChar
+  imageUrl    String        @db.VarChar
+  createdAt   DateTime      @db.Timestamp(6)
+  updatedAt   DateTime      @updatedAt @db.Timestamp(6)
+  transaction transaction[]
 }
 
 model alembic_version {
   version_num String @id(map: "alembic_version_pkc") @db.VarChar(32)
 }
 
-model category {
-  user_name     String    @unique(map: "ix_category_user_name") @db.VarChar
-  category_name String    @db.VarChar
-  id            Int       @id @default(autoincrement())
-  created_at    DateTime? @db.Timestamp(6)
-  updated_at    DateTime? @db.Timestamp(6)
-}
-
 model transaction {
   id          Int      @id @default(autoincrement())
   description String   @db.VarChar
   date        DateTime @db.Timestamp(6)
-  value       Int
-  category_id Int
-  is_notified Boolean
   user_id     Int
-  wallet_id   Int
-  name        String   @db.VarChar
-  image       String   @db.VarChar
+  amount      Int?
+  budget_id   Int
+  budget      budget   @relation(fields: [budget_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user        user     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model wallet {
@@ -47,4 +38,12 @@ model wallet {
   name       String   @db.VarChar
   value      Int
   created_at DateTime @db.Timestamp(6)
+}
+
+model budget {
+  id          Int           @id @default(autoincrement())
+  icon        String        @db.VarChar
+  name        String        @db.VarChar
+  amount      Int
+  transaction transaction[]
 }
