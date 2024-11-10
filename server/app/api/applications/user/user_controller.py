@@ -1,6 +1,6 @@
 import base64
 from fastapi import File, HTTPException, UploadFile
-from models.users import User
+from app.models.users import User, UserIn
 from sqlmodel import Session, select
 from core.config import settings
 
@@ -19,7 +19,7 @@ def delete_user(session: Session, user_id: int):
   return 
 
 def update_user(
-    session: Session, user_id: int, data_in: User
+    session: Session, user_id: int, data_in: UserIn
 ) -> User:
     db_user = session.get(User, user_id)
     if not db_user:
@@ -32,7 +32,7 @@ def update_user(
 
     return db_user
 
-def create_user(session: Session, data_in: User) -> User:
+def create_user(session: Session, data_in: UserIn) -> User:
   user = session.exec(select(User).where(User.email == data_in.email)).first()
   if user:
     raise HTTPException(status_code=400, detail="User name already registered")
@@ -40,7 +40,6 @@ def create_user(session: Session, data_in: User) -> User:
   if "@" not in data_in.email:
     raise HTTPException(status_code=400, detail="Invalid email address")
 
-  user = session.exec(select(User).where(User.email == data_in.email)).first()
   if user:
     raise HTTPException(status_code=400, detail="Email address already registered")
 

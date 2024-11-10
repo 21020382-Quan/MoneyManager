@@ -1,10 +1,10 @@
 import base64
 from fastapi import File, HTTPException, UploadFile
-from app.models.wallets import Wallet
+from app.models.wallets import Wallet, WalletOut
 from sqlmodel import Session, select
 from core.config import settings
 
-def read_wallet(session: Session, wallet_id: int) -> Wallet:
+def read_wallet(session: Session, wallet_id: int) -> WalletOut:
   db_wallet = session.get(Wallet, wallet_id)
   if not db_wallet:
     raise HTTPException(status_code=404, detail="wallet not found")
@@ -16,7 +16,7 @@ def delete_wallet(session: Session, wallet_id: int):
     raise HTTPException(status_code=404, detail="wallet not found")
   session.delete(db_wallet)
   session.commit()
-  return 
+  return "Wallet was deleted"
 
 def update_wallet(session: Session, wallet_id: int, data: Wallet) -> Wallet:
   db_wallet = session.get(Wallet, wallet_id)
@@ -32,6 +32,7 @@ def update_wallet(session: Session, wallet_id: int, data: Wallet) -> Wallet:
 def create_wallet(session: Session, data: Wallet) -> Wallet: 
   wallet = session.exec(select(Wallet).where(Wallet.name == data.name)).first()
   wallet = Wallet(
+    user_id=data.user_id,
     name=data.name, 
     value=data.value,
     created_at=data.created_at,
