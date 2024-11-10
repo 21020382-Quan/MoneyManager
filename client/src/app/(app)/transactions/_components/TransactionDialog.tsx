@@ -36,7 +36,7 @@ export default function TransactionDialog() {
     "Food",
   ]
 
-  const handleCreateBudget = () => {
+  const handleCreateTransaction = () => {
     // TODO: send data to server
     const result = true;
     setBudget('');
@@ -46,13 +46,13 @@ export default function TransactionDialog() {
       toast({
         title: "Add expense successfully!",
         duration: 3000,
-        className: "border-none bg-[#5cb85c] text-white",
+        className: "border-none bg-green-500 text-white",
       })
     } else {
       toast({
         title: "Add expense failed!",
         duration: 3000,
-        className: "border-none bg-[#d9534f] text-white",
+        className: "border-none bg-red-500 text-white",
       })
     }
   }
@@ -117,9 +117,9 @@ export default function TransactionDialog() {
               disabled={!(budget && description && amount)}
               type="submit"
               className="bg-blue-500 hover:bg-blue-300 border rounded-full"
-              onClick={handleCreateBudget}
+              onClick={handleCreateTransaction}
             >
-              Create budget
+              Create transaction
             </Button>
           </DialogClose>
         </DialogFooter>
