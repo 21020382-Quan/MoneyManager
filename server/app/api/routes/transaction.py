@@ -1,12 +1,12 @@
 from fastapi import APIRouter
 from api.deps import SessionDep
 import api.applications.transaction.transaction_controller as TransactionController
-from models.transactions import Transaction, TransactionOut
+from app.models.transactions import Transaction, TransactionOut
 
 router = APIRouter()
 
 @router.get('/{transaction_id}')
-def get_transaction(session: SessionDep, transaction_id: int) -> TransactionOut:
+def get_transaction(session: SessionDep, transaction_id: int):
   return TransactionController.read_transaction(session, transaction_id)
 
 @router.post('/')

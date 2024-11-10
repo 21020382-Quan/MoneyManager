@@ -1,10 +1,10 @@
 import base64
 from fastapi import HTTPException, status
-from models.transactions import Transaction, TransactionOut
+from app.models.transactions import Transaction, TransactionIn, TransactionOut
 from sqlmodel import Session, select
 from core.config import settings
-from models.users import User
-from models.budgets import Budget
+from app.models.users import User
+from app.models.budgets import Budget
 
 def read_transaction(session: Session, transaction_id: int) -> TransactionOut:
   db_transaction = session.exec(select(Transaction).where(Transaction.id == transaction_id)).first()
@@ -47,7 +47,7 @@ def delete_transaction(session: Session, transaction_id: int):
   session.commit()
   return 
 
-def update_transaction(session: Session, transaction_id: int, data: Transaction) -> Transaction:
+def update_transaction(session: Session, transaction_id: int, data: TransactionIn) -> Transaction:
   db_transaction = session.get(Transaction, transaction_id)
   if not db_transaction:
     raise HTTPException(status_code=404, detail="Transaction not found") 
@@ -58,14 +58,13 @@ def update_transaction(session: Session, transaction_id: int, data: Transaction)
 
   return db_transaction
 
-def create_transaction(session: Session, data: Transaction) -> Transaction: 
+def create_transaction(session: Session, data: TransactionIn) -> Transaction: 
   user = session.exec(select(User).where(User.id == data.user_id)).first()
   transaction = Transaction(
-        user_id=data.user_id,
-        budget_id=data.budget_id,
-        description=data.description,
-        amount=data.amount,
-        date=data.date 
+      user_id=user.id,
+      budget_id=data.budget_id,
+      description=data.description,
+      amount=data.amount,
     )
   session.add(transaction)
   session.commit()

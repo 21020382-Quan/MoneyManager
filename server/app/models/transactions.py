@@ -2,8 +2,9 @@ from datetime import datetime
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from models.users import User
-from models.budgets import Budget
+from app.models.users import User, UserOut
+from app.models.budgets import Budget, BudgetOut
+
 class TransactionBase(SQLModel):
     pass
 
@@ -24,6 +25,11 @@ class TransactionOut(TransactionBase):
     id: int 
     description: str
     amount: int 
-    budget: Budget
-    user: User
+    budget: BudgetOut
+    user: UserOut
 
+class TransactionIn(TransactionBase): 
+    user_id: int
+    budget_id: int
+    description: str
+    amount: int
