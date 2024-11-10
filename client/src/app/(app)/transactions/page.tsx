@@ -28,7 +28,7 @@ export default async function Transactions() {
       },
       {
         id: "623ejh98e",
-        budget: "Shopping",
+        budget: "Food",
         description: "Lorem ipsum",
         date: new Date("2024-08-29"),
         amount: 100000,

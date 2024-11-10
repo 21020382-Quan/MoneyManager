@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/tooltip"
 import { toLocalMoney } from '@/lib/utils';
 
-interface BudgetItemProps {
+export type BudgetItemProps = {
   emoji: string;
   name: string;
   transactions: number;
