@@ -16,11 +16,13 @@ export default function LeftbarItem({
   children,
 } : LeftbarItemProps) {
   const pathname = usePathname();
+  const basePath = `/${pathname.split('/')[1]}`;
+  console.log(basePath);
   return (
     <Link href={link}>
       <Button className={`
         w-full gap-2 text-md justify-start hover:text-blue-500 hover:bg-blue-100
-        ${pathname === link && 'text-blue-500 bg-blue-100'}`} 
+        ${basePath === link && 'text-blue-500 bg-blue-100'}`} 
         variant='ghost' 
       >
         <Icon />
