@@ -16,8 +16,13 @@ import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '@radix-ui/react-dialog';
 import EmojiPicker from 'emoji-picker-react';
 import { useEffect, useRef, useState } from 'react';
+import { BudgetItemProps } from './BudgetItem';
 
-export default function BudgetDialog() {
+interface BudgetDialogProps {
+  onAddBudget: (newBudget: BudgetItemProps) => void;
+}
+
+export default function BudgetDialog({onAddBudget}: BudgetDialogProps) {
   const [emoji, setEmoji] = useState<string>('');
   const [openEmoji, setOpenEmoji] = useState(false);
   const [name, setName] = useState<string>('');
@@ -63,6 +68,10 @@ export default function BudgetDialog() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const newBudget = await response.json();
+
+      onAddBudget(newBudget);
 
       setOpenEmoji(false);
       setEmoji('');

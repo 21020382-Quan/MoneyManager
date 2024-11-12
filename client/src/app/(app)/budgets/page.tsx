@@ -5,6 +5,8 @@ import { useToast } from '@/hooks/use-toast';
 import BudgetDialog from './_components/BudgetDialog';
 import BudgetItem, { BudgetItemProps } from './_components/BudgetItem';
 
+type AddBudgetFunction = (newBudget: BudgetItemProps) => void;
+
 export default function Budgets() {
   const { toast } = useToast();
   const [budgets, setBudgets] = useState<BudgetItemProps[]>();
@@ -39,11 +41,15 @@ export default function Budgets() {
     };
 
     fetchData();
-    console.log(budgets);
   }, []);
 
+  console.log(budgets);
   if (error || budgets === undefined) {
     return <div></div>;
+  }
+  
+  const addBudget: AddBudgetFunction = (newBudget) => {
+    setBudgets((prevBudgets = []) => [...prevBudgets, newBudget])
   }
 
   return (
@@ -53,10 +59,10 @@ export default function Budgets() {
       </div>
       <div className="mt-8 pb-24 flex flex-wrap gap-4 justify-around">
         {budgets.map((budget, index) => (
-          <BudgetItem budget={budget} key={index} />
+          <BudgetItem budget={budget} key={index} link={`/budgets/budget/${budget.id}`} />
         ))}
       </div>
-      <BudgetDialog />
+      <BudgetDialog onAddBudget={addBudget} />
     </div>
   );
 }
