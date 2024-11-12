@@ -6,10 +6,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { cn, toLocalMoney } from '@/lib/utils';
-import { BudgetTransaction } from '../[id]/columns';
+import { BudgetTransaction } from '../budget/[id]/columns';
 
 export type BudgetItemProps = {
-  emoji: string;
+  icon: string;
   name: string;
   transactions: number;
   amount: number;
@@ -27,7 +27,7 @@ export default function BudgetItem({budget, className} : BudgetProps) {
       <div className="flex items-center justify-between">
         <div className="flex gap-2 items-center max-w-[150px] overflow-clip">
           <div className="p-2 bg-slate-300 rounded-full text-xl">
-            {budget.emoji}
+            {budget.icon}
           </div>
           <div>
             <TooltipProvider>

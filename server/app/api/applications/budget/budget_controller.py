@@ -57,7 +57,10 @@ def update_budget(session: Session, budget_id: int, data: BudgetIn) -> Budget:
   return db_budget
 
 def create_budget(session: Session, data: BudgetIn) -> Budget: 
-  budget = session.exec(select(Budget).where(Budget.name == data.name)).first()
+  existing_budget = session.exec(select(Budget).where(Budget.name == data.name)).first()
+  if existing_budget:
+    raise HTTPException(status_code=400, detail="Budget with this name already exists")
+
   budget = Budget(
     icon=data.icon, 
     name=data.name, 

@@ -1,9 +1,9 @@
 import { DataTable } from "@/components/ui/data-table";
 import TransactionDialog from "./_components/TransactionDialog";
-import { Payment, columns } from "./columns";
+import { Transaction, columns } from "./columns";
 
 export default async function Transactions() {
-  const fetchData = async (): Promise<Payment[]> => {
+  const fetchData = async (): Promise<Transaction[]> => {
     return [
       {
         id: "728ed52f",

@@ -1,34 +1,51 @@
+"use client";
+
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import BudgetDialog from './_components/BudgetDialog';
 import BudgetItem, { BudgetItemProps } from './_components/BudgetItem';
 
-export default async function Budgets() {
-  const fetchData = async (): Promise<BudgetItemProps[]> => {
-    return [
-      {
-        emoji: '🛍️',
-        name: 'Shopping',
-        transactions: 3,
-        amount: 10000000,
-        totalSpent: 400,
-      },
-      {
-        emoji: '🛍️',
-        name: 'Memberships',
-        transactions: 2,
-        amount: 1000000,
-        totalSpent: 500,
-      },
-      {
-        emoji: '🛍️',
-        name: 'Food',
-        transactions: 10,
-        amount: 500000,
-        totalSpent: 500000,
-      },
-      // ...
-    ];
-  };
-  const budgets = await fetchData();
+export default function Budgets() {
+  const { toast } = useToast();
+  const [budgets, setBudgets] = useState<BudgetItemProps[]>();
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8081/api/v1/budget/get_all_budgets", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setBudgets(data.data);
+      } catch (error) {
+        console.log(error);
+        toast({
+          title: `Failed to load page!`,
+          description: `${error}`,
+          duration: 3000,
+          className: "border-none bg-red-500 text-white",
+        });
+        setError(true);
+      }
+    };
+
+    fetchData();
+    console.log(budgets);
+  }, []);
+
+  if (error || budgets === undefined) {
+    return <div></div>;
+  }
+
   return (
     <div className="relative" style={{ minHeight: 'calc(100vh - 96px)' }}>
       <div>
@@ -39,7 +56,7 @@ export default async function Budgets() {
           <BudgetItem budget={budget} key={index} />
         ))}
       </div>
-      <BudgetDialog/>
+      <BudgetDialog />
     </div>
   );
 }

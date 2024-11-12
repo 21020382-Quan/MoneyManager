@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { Button } from '@/components/ui/button';
 import {
@@ -18,12 +18,12 @@ import EmojiPicker from 'emoji-picker-react';
 import { useEffect, useRef, useState } from 'react';
 
 export default function BudgetDialog() {
-  const [icon, setEmoji] = useState<string>('');
+  const [emoji, setEmoji] = useState<string>('');
   const [openEmoji, setOpenEmoji] = useState(false);
   const [name, setName] = useState<string>('');
   const [amount, setAmount] = useState<number>(0);
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   const handleSelectEmoji = (e: { emoji: string }) => {
     setEmoji(e.emoji);
@@ -46,7 +46,7 @@ export default function BudgetDialog() {
   const handleCreateBudget = async () => {
     // TODO: send data to server
     const data = {
-      icon,
+      icon: emoji,
       name,
       amount
     }
@@ -58,7 +58,12 @@ export default function BudgetDialog() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      });
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       setOpenEmoji(false);
       setEmoji('');
       setName('');
@@ -69,10 +74,9 @@ export default function BudgetDialog() {
         className: "border-none bg-green-500 text-white",
       })
     } catch (error) {
-      console.log(error);
       toast({
-        title: `Create budget failed!
-                Error: ${error}`,
+        title: `Create budget failed!`,
+        description: `${error}`,
         duration: 3000,
         className: "border-none bg-red-500 text-white",
       })
@@ -106,7 +110,7 @@ export default function BudgetDialog() {
               Icon:
             </Label>
             <Button variant="outline" onClick={openEmojiPicker}>
-              {icon}
+              {emoji}
             </Button>
             {openEmoji && (
               <div className="absolute top-10" ref={emojiPickerRef}>
@@ -143,7 +147,7 @@ export default function BudgetDialog() {
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              disabled={!(name && amount && icon)}
+              disabled={!(name && amount && emoji)}
               type="submit"
               className="bg-blue-500 hover:bg-blue-300 border rounded-full"
               onClick={handleCreateBudget}

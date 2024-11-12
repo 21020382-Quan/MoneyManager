@@ -65,8 +65,6 @@ export const columns: ColumnDef<Transaction>[] = [
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original
- 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

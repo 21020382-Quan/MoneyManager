@@ -17,7 +17,6 @@ export default function LeftbarItem({
 } : LeftbarItemProps) {
   const pathname = usePathname();
   const basePath = `/${pathname.split('/')[1]}`;
-  console.log(basePath);
   return (
     <Link href={link}>
       <Button className={`

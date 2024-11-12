@@ -1,9 +1,12 @@
 'use client'
 
-import { ArrowLeftRight, LayoutDashboard, LucideIcon, Target, Wallet } from "lucide-react"
+import { ArrowLeftRight, LayoutDashboard, Target, Wallet } from "lucide-react"
 import LeftbarItem from "./LeftbarItem"
 import Image from "next/image"
 import { UserButton } from "@clerk/nextjs"
+import { useState } from "react"
+import { Calendar } from "@nextui-org/calendar";
+import { getLocalTimeZone, today } from "@internationalized/date"
 
 export default function Leftbar() {
   const items = [
@@ -28,6 +31,9 @@ export default function Leftbar() {
       title: 'Plan',
     },
   ]
+  const defaultDate = today(getLocalTimeZone());
+  const [focusedDate, setFocusedDate] = useState(defaultDate);
+
   return (
     <div className='w-60 max-w-xs h-screen fixed left-0 top-0 border-r p-3'>
       <div className='h-20 border-b flex flex-row gap-2 items-center'>
@@ -40,6 +46,13 @@ export default function Leftbar() {
             {item.title}
           </LeftbarItem>
         ))}
+        <Calendar
+          className="mt-8"
+          aria-label="Date (Controlled Focused Value)"
+          focusedValue={focusedDate}
+          value={defaultDate}
+          onFocusChange={setFocusedDate}
+        />
       </div>
       <div className='fixed bottom-6 left-6'>
         <UserButton />

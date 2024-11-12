@@ -30,6 +30,5 @@ export default async function getUser(): Promise<User|null> {
       }
     })
   }
-  console.log(user.clerkUserId);
   return user;
 }

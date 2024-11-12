@@ -26,20 +26,20 @@ export default async function Dashboard() {
     },
   ]
   const user = getUser();
-    return (
-      <div className="relative" style={{ minHeight: 'calc(100vh - 96px)' }}>
-        <div>
-          <h1 className="font-bold text-3xl">Dashboard</h1>
-        </div>
-        <div className='mt-8 flex flex-wrap gap-4 justify-around'>
-          {cardsInfo.map((item, index) => (
-            <SpendingCard key={index} title={item.title} amount={item.amount} />
-          ))}
-        </div>
-        <div className='mt-8'>
-          Graph 
-        </div>
+  return (
+    <div className="relative" style={{ minHeight: 'calc(100vh - 96px)' }}>
+      <div>
+        <h1 className="font-bold text-3xl">Dashboard</h1>
       </div>
-    );
-  }
+      <div className='mt-8 flex flex-wrap gap-4 justify-around'>
+        {cardsInfo.map((item, index) => (
+          <SpendingCard key={index} title={item.title} amount={item.amount} />
+        ))}
+      </div>
+      <div className='mt-8'>
+        Graph 
+      </div>
+    </div>
+  );
+}
   
