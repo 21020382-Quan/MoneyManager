@@ -11,8 +11,9 @@ router = APIRouter()
 def get_budget(session: SessionDep, budget_id: int):
   return budgetController.read_budget(session, budget_id)
 
-@router.post('/')
+@router.post('')
 def create_budget(session: SessionDep, budget: BudgetIn):
+  print(budget, '============')
   return budgetController.create_budget(session, budget)
 
 @router.get('/get_all_budgets')

@@ -44,10 +44,6 @@ class Settings(BaseSettings):
             return f"http://{self.DOMAIN}"
         return f"https://{self.DOMAIN}"
 
-    BACKEND_CORS_ORIGINS: Annotated[
-        list[AnyUrl] | str, BeforeValidator(parse_cors)
-    ] = []
-
     POSTGRES_SERVER: str
     POSTGRES_PORT: int
     POSTGRES_USER: str

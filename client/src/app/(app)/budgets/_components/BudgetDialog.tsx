@@ -50,9 +50,9 @@ export default function BudgetDialog() {
       name,
       amount
     }
+    
     try {
-      const response = await fetch("http://localhost:8081/api/v1/budget/", {
-        mode: 'no-cors',    
+      const response = await fetch("http://localhost:8081/api/v1/budget", {  
         method: "POST",
         headers: {
           "Content-Type": "application/json",

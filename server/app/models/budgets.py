@@ -10,7 +10,7 @@ class Budget(BudgetBase, table=True):
     icon: str
     name: str
     amount: int
-    total_spent: int
+    total_spent: int = Field(default=None, nullable=True)
     transactions: list["Transaction"] = Relationship(
         back_populates="budget", sa_relationship_kwargs={"cascade": "all, delete"}
     )
