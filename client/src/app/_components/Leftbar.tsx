@@ -6,7 +6,7 @@ import Image from "next/image"
 import { UserButton } from "@clerk/nextjs"
 import { useState } from "react"
 import { Calendar } from "@nextui-org/calendar";
-import { getLocalTimeZone, today } from "@internationalized/date"
+import { today, getLocalTimeZone } from "@internationalized/date";
 
 export default function Leftbar() {
   const items = [
@@ -31,11 +31,12 @@ export default function Leftbar() {
       title: 'Plan',
     },
   ]
+
   const defaultDate = today(getLocalTimeZone());
   const [focusedDate, setFocusedDate] = useState(defaultDate);
 
   return (
-    <div className='w-60 max-w-xs h-screen fixed left-0 top-0 border-r p-3'>
+    <div className='w-60 h-screen fixed left-0 top-0 border-r p-3'>
       <div className='h-20 border-b flex flex-row gap-2 items-center'>
         <Image src={'/logo.png'} alt='logo' width='50' height='50' />
         <div className='text-blue-500 font-bold text-xl'>MoneyManager</div>
@@ -47,10 +48,9 @@ export default function Leftbar() {
           </LeftbarItem>
         ))}
         <Calendar
-          className="mt-8"
-          aria-label="Date (Controlled Focused Value)"
-          focusedValue={focusedDate}
+          aria-label="Date"
           value={defaultDate}
+          focusedValue={focusedDate}
           onFocusChange={setFocusedDate}
         />
       </div>
