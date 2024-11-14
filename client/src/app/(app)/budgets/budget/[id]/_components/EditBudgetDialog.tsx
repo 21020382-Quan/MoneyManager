@@ -11,24 +11,29 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '@radix-ui/react-dialog';
+import { Label } from '@radix-ui/react-label';
 import EmojiPicker from 'emoji-picker-react';
+import { LucideEdit } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { BudgetItemProps } from './BudgetItem';
 
-interface BudgetDialogProps {
-  onAddBudget: (newBudget: BudgetItemProps) => void;
+interface EditBudgetDialogProps {
+  id: string;
+  prevIcon: string;
+  prevName: string;
+  prevAmount: number;
 }
 
-export default function BudgetDialog({onAddBudget}: BudgetDialogProps) {
-  const [icon, setIcon] = useState<string>('');
+export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount }: EditBudgetDialogProps) {
+  const [icon, setIcon] = useState<string>(prevIcon);
   const [openEmoji, setOpenEmoji] = useState(false);
-  const [name, setName] = useState<string>('');
-  const [amount, setAmount] = useState<number>(0);
+  const [name, setName] = useState<string>(prevName);
+  const [amount, setAmount] = useState<number>(prevAmount);
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleSelectEmoji = (e: { emoji: string }) => {
     setIcon(e.emoji);
@@ -48,49 +53,40 @@ export default function BudgetDialog({onAddBudget}: BudgetDialogProps) {
     setOpenEmoji(true);
   };
 
-  const handleCreateBudget = async () => {
-    // TODO: send data to server
-    const data = {
-      icon,
-      name,
-      amount
-    }
-    
+  const handleEditBudget = async () => {
     try {
-      const response = await fetch("http://localhost:8081/api/v1/budget", {  
-        method: "POST",
+      const request = { 
+        id,
+        icon,
+        name,
+        amount
+      };
+      const response = await fetch(`http://localhost:8081/api/v1/budget/put/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
-      })
+        body: JSON.stringify(request),
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const newBudget = await response.json();
-
-      onAddBudget(newBudget);
-
-      setOpenEmoji(false);
-      setIcon('');
-      setName('');
-      setAmount(0);
       toast({
-        title: "Create budget successfully!",
+        title: "Edit budget successfully!",
         duration: 3000,
         className: "border-none bg-green-500 text-white",
-      })
+      });
     } catch (error) {
       toast({
-        title: `Create budget failed!`,
+        title: `Edit budget failed!`,
         description: `${error}`,
         duration: 3000,
         className: "border-none bg-red-500 text-white",
-      })
+      });
     }
-  }
+  };
 
   useEffect(() => {
     if (openEmoji) {
@@ -104,14 +100,17 @@ export default function BudgetDialog({onAddBudget}: BudgetDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500 hover:bg-blue-300 border rounded-xl absolute right-4 bottom-4 font-bold text-xl w-auto h-auto flex items-center justify-center">
-          + Add new budget
+        <Button 
+          className="min-w-32 w-full bg-yellow-500 font-bold text-lg h-full hover:text-yellow-100 hover:bg-yellow-500"
+        >
+          <LucideEdit />
+          <span>Edit</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add a budget</DialogTitle>
-          <DialogDescription>Create a new budget to manage your expenses</DialogDescription>
+          <DialogTitle>Edit '{name}' budget</DialogTitle>
+          <DialogDescription>Update the information of this budget</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -156,12 +155,12 @@ export default function BudgetDialog({onAddBudget}: BudgetDialogProps) {
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              disabled={!(name && amount && icon)}
+              disabled={!(name && amount && icon) || (name === prevName && amount === prevAmount && icon === prevIcon)}
               type="submit"
-              className="bg-blue-500 hover:bg-blue-300 border rounded-full"
-              onClick={handleCreateBudget}
+              className="hover:text-yellow-100 hover:bg-yellow-500 bg-yellow-500 border rounded-full"
+              onClick={handleEditBudget}
             >
-              Create budget
+              Edit
             </Button>
           </DialogClose>
         </DialogFooter>

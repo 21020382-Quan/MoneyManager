@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
+import { LucideEdit, LucideTrash, MoreHorizontal } from "lucide-react"
  
 import { Button } from "@/components/ui/button"
 import {
@@ -14,6 +14,9 @@ import {
 
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { toLocalMoney } from "@/lib/utils"
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import DeleteTransactionDialog from "./_components/DeleteTransactionDialog"
+import EditTransactionDialog from "./_components/EditTransactionDialog"
  
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -75,8 +78,10 @@ export const columns: ColumnDef<Transaction>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => {console.log(row.original.id)}}>Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {console.log(row.original.id)}}>Delete</DropdownMenuItem>
+            <div className="flex flex-col gap-2">
+              <EditTransactionDialog id={row.original.id} prevBudget={row.original.budget} prevDescription={row.original.description} prevAmount={row.original.amount} />
+              <DeleteTransactionDialog id={row.original.id} description={row.original.description} />
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
       )

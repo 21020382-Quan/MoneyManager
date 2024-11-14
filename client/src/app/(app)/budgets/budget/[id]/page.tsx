@@ -3,10 +3,10 @@
 import { DataTable } from "@/components/ui/data-table";
 import BudgetItem, { BudgetItemProps } from "../../_components/BudgetItem";
 import { columns } from "./columns";
-import { Button } from "@/components/ui/button";
-import { LucidePen, LucidePenBox, LucideTrash } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
+import DeleteBudgetDialog from "./_components/DeleteBudgetDialog";
+import EditBudgetDialog from "./_components/EditBudgetDialog";
 
 interface ParamsProps {
   params: {
@@ -49,8 +49,6 @@ export default function Budget({ params } : ParamsProps) {
     fetchData();
   }, []);
 
-  console.log(budget);
-
   if (error || budget === undefined) {
     return <div></div>;
   }
@@ -63,14 +61,8 @@ export default function Budget({ params } : ParamsProps) {
       <div className="mt-8 flex flex-row gap-4">
         <BudgetItem className="min-w-[300px] max-w-[450px] w-full" budget={budget}/>
         <div className="flex flex-col gap-4 w-full">
-          <Button className="min-w-32 max-w-60 w-full bg-yellow-500 font-bold text-lg h-full hover:text-yellow-100 hover:bg-yellow-500">
-            <LucidePenBox />
-            <span className="ml-2">Edit</span>
-          </Button>
-          <Button className="min-w-32 max-w-60 w-full bg-red-500 font-bold text-lg h-full hover:text-red-100 hover:bg-red-500">
-            <LucideTrash />
-            <span className="ml-2">Delete</span>
-          </Button>
+          <EditBudgetDialog id={budget.id} prevIcon={budget.icon} prevName={budget.name} prevAmount={budget.amount}/>
+          <DeleteBudgetDialog id={budget.id} name={budget.name}/>
         </div>
       </div>
       <div className="mt-8">
