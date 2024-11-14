@@ -1,5 +1,4 @@
 import SpendingCard from "@/app/(app)/dashboard/_components/SpendingCard";
-import getUser, { User } from "@/lib/user";
 
 interface SpendingCardProps {
   title: string
@@ -25,7 +24,6 @@ export default async function Dashboard() {
       amount: 1000000,
     },
   ]
-  const user = getUser();
   return (
     <div className="relative" style={{ minHeight: 'calc(100vh - 96px)' }}>
       <div>
@@ -41,5 +39,5 @@ export default async function Dashboard() {
       </div>
     </div>
   );
-}
+  }
   

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import BudgetDialog from './_components/BudgetDialog';
 import BudgetItem, { BudgetItemProps } from './_components/BudgetItem';
+import { useUser } from '@clerk/nextjs';
 
 type AddBudgetFunction = (newBudget: BudgetItemProps) => void;
 
@@ -11,6 +12,8 @@ export default function Budgets() {
   const { toast } = useToast();
   const [budgets, setBudgets] = useState<BudgetItemProps[]>();
   const [error, setError] = useState(false);
+  const user = useUser();
+  console.log(user.user?.id);
 
   useEffect(() => {
     const fetchData = async () => {
