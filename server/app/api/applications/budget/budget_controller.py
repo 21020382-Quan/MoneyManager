@@ -43,6 +43,7 @@ def delete_budget(session: Session, budget_id: int):
   if not db_budget:
     raise HTTPException(status_code=404, detail="budget not found")
   session.delete(db_budget)
+  session.commit()
   return f"Budget was deleted"
 
 def update_budget(session: Session, budget_id: int, data: BudgetIn) -> Budget:
