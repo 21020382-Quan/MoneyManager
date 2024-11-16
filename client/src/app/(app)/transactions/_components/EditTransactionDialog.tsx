@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,101 +10,89 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '@radix-ui/react-dialog';
-import { useState } from 'react';
-import { Transaction } from '../columns';
+import { Label } from '@radix-ui/react-label';
+import EmojiPicker from 'emoji-picker-react';
+import { LucideEdit } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
-interface TransactionDialogProps {
-  onAddTransaction: (newTransaction: Transaction) => void;
-  budgets: string[];
+interface EditTransactionDialogProps {
+  id: string;
+  prevBudget: string;
+  prevDescription: string;
+  prevAmount: number;
 }
 
+export default function EditTransactionDialog({ id, prevBudget, prevDescription, prevAmount }: EditTransactionDialogProps) {
+  const [budget, setBudget] = useState<string>(prevBudget);
+  const [description, setDescription] = useState<string>(prevDescription);
+  const [amount, setAmount] = useState<number>(prevAmount);
+  const { toast } = useToast();
 
-export default function TransactionDialog({ onAddTransaction, budgets } : TransactionDialogProps) {
-  const [budget, setBudget] = useState<string>();
-  const [description, setDescription] = useState<string>('');
-  const [amount, setAmount] = useState<number>(0);
-  const {toast} = useToast();
-  const handleCreateTransaction = async () => {
-    // TODO: send data to server
-    const request = {
-      budget,
-      description,
-      amount,
-    }
-    
+  const handleEditTransaction = async () => {
     try {
-      const response = await fetch("http://localhost:8081/api/v1/transaction", {  
-        method: "POST",
+      const request = { 
+        id,
+        budget,
+        description,
+        amount,
+      };
+      const response = await fetch(`http://localhost:8081/api/v1/transaction/put/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(request),
-      })
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const newTransaction = await response.json();
-
-      onAddTransaction(newTransaction);
-
-      setBudget('');
-      setDescription('');
-      setAmount(0);
       toast({
-        title: "Create transaction successfully!",
+        title: "Edit transaction successfully!",
         duration: 3000,
         className: "border-none bg-green-500 text-white",
-      })
+      });
     } catch (error) {
       toast({
-        title: `Create transaction failed!`,
+        title: `Edit transaction failed!`,
         description: `${error}`,
         duration: 3000,
         className: "border-none bg-red-500 text-white",
-      })
+      });
     }
-  }
+  };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500 hover:bg-blue-300 border rounded-xl absolute right-4 bottom-4 font-bold text-xl w-auto h-auto flex items-center justify-center">
-          + Add a transaction
+        <Button className="bg-yellow-500 font-bold hover:text-yellow-100 hover:bg-yellow-500">
+        <LucideEdit />
+        <span>Edit</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add a transaction</DialogTitle>
-          <DialogDescription>Create a transaction and put it in the corresponding budget</DialogDescription>
+          <DialogTitle>Edit transaction</DialogTitle>
+          <DialogDescription>Update the information of this Transaction</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
+        <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="budget" className="text-right">
               Budget:
             </Label>
-            <Select value={budget} onValueChange={setBudget}>
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Select a budget" />
-              </SelectTrigger>
-              <SelectContent>
-                {budgets.map((budget, index) => (
-                  <SelectItem value={budget} key={index}>{budget}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Input
+              id="budget"
+              placeholder="Budget"
+              className="col-span-3"
+              value={budget}
+              disabled
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="description" className="text-right">
@@ -135,12 +123,12 @@ export default function TransactionDialog({ onAddTransaction, budgets } : Transa
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              disabled={!(budget && description && amount)}
+              disabled={!(budget && description && amount) || (budget === prevBudget && amount === prevAmount && description === prevDescription)}
               type="submit"
-              className="bg-blue-500 hover:bg-blue-300 border rounded-full"
-              onClick={handleCreateTransaction}
+              className="hover:text-yellow-100 hover:bg-yellow-500 bg-yellow-500 border rounded-full"
+              onClick={handleEditTransaction}
             >
-              Create transaction
+              Edit
             </Button>
           </DialogClose>
         </DialogFooter>

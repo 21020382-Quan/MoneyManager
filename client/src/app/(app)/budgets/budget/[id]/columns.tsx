@@ -17,14 +17,14 @@ import { toLocalMoney } from "@/lib/utils"
  
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type BudgetPayment = {
+export type BudgetTransaction = {
   id: string
   description: string
   date: Date
   amount: number
 }
  
-export const columns: ColumnDef<BudgetPayment>[] = [
+export const columns: ColumnDef<BudgetTransaction>[] = [
   {
     accessorKey: "description",
     header: ({ column }) => (
@@ -58,8 +58,6 @@ export const columns: ColumnDef<BudgetPayment>[] = [
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original
- 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

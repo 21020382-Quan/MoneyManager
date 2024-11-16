@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 # import jwt
 from fastapi.routing import APIRoute
-from fastapi.middleware.cors import CORSMiddleware
-# from typing import Union, Any
-# from datetime import datetime, timedelta
+
+from starlette.middleware.cors import CORSMiddleware
+
 
 from api.main import api_router
 from core.config import settings
@@ -23,6 +23,7 @@ app = FastAPI(
     generate_unique_id_function=custom_generate_unique_id,
     root_path=settings.ROOT_PATH,
 )
+
 
 # def verify_password(email, password):
 #     if email == 'admin' and password == 'admin':
@@ -50,14 +51,24 @@ app = FastAPI(
 #     else:
 #         raise HTTPException(status_code=404, detail="User not found")
 
-
-
 @app.get("/", name="Health", tags=["Health"])
 def check_health():
     return {
         "health": "ok",
     }
 
+origins = [
+    "http://localhost:3000",
+    "http://localhost:8081",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # if settings.BACKEND_CORS_ORIGINS:
 #     app.add_middleware(
 #         CORSMiddleware,
