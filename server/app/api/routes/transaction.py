@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from api.deps import SessionDep
 import api.applications.transaction.transaction_controller as TransactionController
-from app.models.transactions import Transaction, TransactionOut
+from app.models.transactions import Transaction, TransactionListOut, TransactionOut
 
 router = APIRouter()
 
@@ -20,3 +20,7 @@ def delete_transaction(session: SessionDep, transaction_id: int):
 @router.put('/{transaction_id}')
 def update_transaction(session: SessionDep, transaction_id: int, transaction: Transaction):
   return TransactionController.update_transaction(session, transaction_id, transaction)
+
+@router.get('/get_all_transactions')
+def get_all_transactions(session: SessionDep) -> TransactionListOut: 
+  return TransactionController.read_all_transactions(session)

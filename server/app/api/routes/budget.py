@@ -13,7 +13,6 @@ def get_budget(session: SessionDep, budget_id: int):
 
 @router.post('')
 def create_budget(session: SessionDep, budget: BudgetIn):
-  print(budget, '============')
   return budgetController.create_budget(session, budget)
 
 @router.get('/get_all_budgets')
