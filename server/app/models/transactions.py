@@ -33,3 +33,7 @@ class TransactionIn(TransactionBase):
     budget_id: int
     description: str
     amount: int
+
+class TransactionListOut(SQLModel): 
+    data: list[Transaction]
+    count: int
