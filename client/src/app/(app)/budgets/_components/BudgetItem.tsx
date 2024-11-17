@@ -9,7 +9,7 @@ import { cn, toLocalMoney } from '@/lib/utils';
 import { BudgetTransaction } from '../budget/[id]/columns';
 import Link from 'next/link';
 
-export type BudgetItemProps = {
+export type BudgetItemInfo = {
   id: string;
   icon: string;
   name: string;
@@ -20,7 +20,7 @@ export type BudgetItemProps = {
 };
 
 interface BudgetProps extends React.HTMLAttributes<HTMLDivElement> {
-  budget: BudgetItemProps;
+  budget: BudgetItemInfo;
   link?: string;
 };
 

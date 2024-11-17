@@ -1,7 +1,7 @@
 "use client"
 
 import { DataTable } from "@/components/ui/data-table";
-import BudgetItem, { BudgetItemProps } from "../../_components/BudgetItem";
+import BudgetItem, { BudgetItemInfo } from "../../_components/BudgetItem";
 import { columns } from "./columns";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ interface ParamsProps {
 
 export default function Budget({ params } : ParamsProps) {
   const { toast } = useToast();
-  const [budget, setBudget] = useState<BudgetItemProps>();
+  const [budget, setBudget] = useState<BudgetItemInfo>();
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -53,6 +53,10 @@ export default function Budget({ params } : ParamsProps) {
     return <div></div>;
   }
 
+  const editBudget = (newBudget: BudgetItemInfo) => {
+    setBudget(newBudget);
+  }
+
   return (
     <div className="relative" style={{ minHeight: 'calc(100vh - 96px)' }}>
       <div>
@@ -61,7 +65,7 @@ export default function Budget({ params } : ParamsProps) {
       <div className="mt-8 flex flex-row gap-4">
         <BudgetItem className="min-w-[300px] max-w-[450px] w-full" budget={budget}/>
         <div className="flex flex-col gap-4 w-full">
-          <EditBudgetDialog id={budget.id} prevIcon={budget.icon} prevName={budget.name} prevAmount={budget.amount}/>
+          <EditBudgetDialog id={budget.id} prevIcon={budget.icon} prevName={budget.name} prevAmount={budget.amount} onEditBudget={editBudget}/>
           <DeleteBudgetDialog id={budget.id} name={budget.name}/>
         </div>
       </div>

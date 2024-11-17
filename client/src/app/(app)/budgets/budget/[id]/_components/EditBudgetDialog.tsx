@@ -16,24 +16,24 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import { Label } from '@radix-ui/react-label';
 import EmojiPicker from 'emoji-picker-react';
 import { LucideEdit } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { BudgetItemInfo } from '../../../_components/BudgetItem';
 
 interface EditBudgetDialogProps {
   id: string;
   prevIcon: string;
   prevName: string;
   prevAmount: number;
+  onEditBudget: (newBudget: BudgetItemInfo) => void;
 }
 
-export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount }: EditBudgetDialogProps) {
+export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, onEditBudget }: EditBudgetDialogProps) {
   const [icon, setIcon] = useState<string>(prevIcon);
   const [openEmoji, setOpenEmoji] = useState(false);
   const [name, setName] = useState<string>(prevName);
   const [amount, setAmount] = useState<number>(prevAmount);
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();
-  const router = useRouter();
 
   const handleSelectEmoji = (e: { emoji: string }) => {
     setIcon(e.emoji);
@@ -72,6 +72,9 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount }:
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const newBudget = await response.json();
+      onEditBudget(newBudget);
 
       toast({
         title: "Edit budget successfully!",
