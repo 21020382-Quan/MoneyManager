@@ -27,8 +27,13 @@ export type Transaction = {
   date: Date
   amount: number
 }
+
+interface ColumnProps {
+  editTransaction: (transaction: Transaction) => void;
+  deleteTransaction: (transaction: Transaction) => void;
+}
  
-export const columns: ColumnDef<Transaction>[] = [
+export const columns = ({ editTransaction, deleteTransaction }: ColumnProps): ColumnDef<Transaction>[] => [
   {
     accessorKey: "budget",
     header: ({ column }) => (
@@ -79,8 +84,8 @@ export const columns: ColumnDef<Transaction>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <div className="flex flex-col gap-2">
-              <EditTransactionDialog id={row.original.id} prevBudget={row.original.budget} prevDescription={row.original.description} prevAmount={row.original.amount} />
-              <DeleteTransactionDialog id={row.original.id} description={row.original.description} />
+              <EditTransactionDialog id={row.original.id} prevBudget={row.original.budget} prevDescription={row.original.description} prevAmount={row.original.amount} onEdit={editTransaction} />
+              <DeleteTransactionDialog id={row.original.id} description={row.original.description} onDelete={deleteTransaction} />
             </div>
           </DropdownMenuContent>
         </DropdownMenu>

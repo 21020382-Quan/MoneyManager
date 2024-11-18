@@ -8,6 +8,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 
 export type AddTransactionFunction = (newTransaction: Transaction) => void;
+export type EditTransactionFunction = (newTransaction: Transaction) => void;
+export type DeleteTransactionFunction = (id: string) => void;
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>();
@@ -90,13 +92,26 @@ export default function Transactions() {
     setTransactions((prevTransactions = []) => [...prevTransactions, newTransaction])
   }
 
+  const deleteTransaction: DeleteTransactionFunction = (id) => {
+    setTransactions((prevTransactions = []) =>
+      prevTransactions.filter((transaction) => transaction.id !== id)
+    );
+  };
+
+  const editTransaction: EditTransactionFunction = (newTransaction) => {
+    setTransactions((prevTransactions = []) => 
+      prevTransactions.filter((transaction) => transaction.id !== newTransaction.id)
+    );
+    setTransactions((prevTransactions = []) => [...prevTransactions, newTransaction])
+  }
+
   return (
     <div className="relative" style={{ minHeight: "calc(100vh - 96px)" }}>
       <div>
         <h1 className="font-bold text-3xl">All transactions</h1>
       </div>
       <div className="mt-8 pb-24">
-        <DataTable columns={columns} data={transactions} />
+        <DataTable columns={columns({editTransaction, deleteTransaction})} data={transactions} />
       </div>
       <TransactionDialog onAddTransaction={addTransaction} budgets={budgets} />
     </div>

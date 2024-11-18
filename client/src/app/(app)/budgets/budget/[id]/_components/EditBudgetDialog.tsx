@@ -112,7 +112,7 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, o
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit '{name}' budget</DialogTitle>
+          <DialogTitle>Edit '{prevName}' budget</DialogTitle>
           <DialogDescription>Update the information of this budget</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -160,7 +160,7 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, o
             <Button
               disabled={!(name && amount && icon) || (name === prevName && amount === prevAmount && icon === prevIcon)}
               type="submit"
-              className="hover:text-yellow-100 hover:bg-yellow-500 bg-yellow-500 border rounded-full"
+              className="hover:bg-yellow-500 bg-yellow-500 border rounded-full"
               onClick={handleEditBudget}
             >
               Edit

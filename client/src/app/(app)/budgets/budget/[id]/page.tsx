@@ -2,11 +2,11 @@
 
 import { DataTable } from "@/components/ui/data-table";
 import BudgetItem, { BudgetItemInfo } from "../../_components/BudgetItem";
-import { columns } from "./columns";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import DeleteBudgetDialog from "./_components/DeleteBudgetDialog";
 import EditBudgetDialog from "./_components/EditBudgetDialog";
+import { columns } from "./columns";
 
 interface ParamsProps {
   params: {
