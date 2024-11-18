@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 # import jwt
 from fastapi.routing import APIRoute
 
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 
 from api.main import api_router
