@@ -104,7 +104,7 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, o
     <Dialog>
       <DialogTrigger asChild>
         <Button 
-          className="min-w-32 w-full bg-yellow-500 font-bold text-lg h-full hover:text-yellow-100 hover:bg-yellow-500"
+          className="min-w-32 w-full bg-yellow-500 hover:bg-yellow-500 font-bold text-lg h-full"
         >
           <LucideEdit />
           <span>Edit</span>
