@@ -1,20 +1,18 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { LucideEdit, LucideTrash, MoreHorizontal } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
  
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { toLocalMoney } from "@/lib/utils"
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import DeleteTransactionDialog from "./_components/DeleteTransactionDialog"
 import EditTransactionDialog from "./_components/EditTransactionDialog"
  
@@ -30,7 +28,7 @@ export type Transaction = {
 
 interface ColumnProps {
   editTransaction: (transaction: Transaction) => void;
-  deleteTransaction: (transaction: Transaction) => void;
+  deleteTransaction: (id: string) => void;
 }
  
 export const columns = ({ editTransaction, deleteTransaction }: ColumnProps): ColumnDef<Transaction>[] => [
