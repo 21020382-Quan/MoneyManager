@@ -44,7 +44,7 @@ export default function TransactionDialog({ onAddTransaction, budgets } : Transa
     }
     
     try {
-      const response = await fetch("http://localhost:8081/api/v1/transaction", {  
+      const response = await fetch("http://localhost:8081/api/v1/transaction/", {  
         method: "POST",
         headers: {
           "Content-Type": "application/json",

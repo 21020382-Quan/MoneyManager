@@ -86,16 +86,21 @@ def update_transaction(session: Session, transaction_id: int, data: TransactionI
 
   return db_transaction
 
-def create_transaction(session: Session, data: TransactionIn) -> Transaction: 
-  user = session.exec(select(User).where(User.id == data.user_id)).first()
-  transaction = Transaction(
-      user_id=user.id,
-      budget_id=data.budget_id,
-      description=data.description,
-      amount=data.amount,
-    )
-  session.add(transaction)
-  session.commit()
-  session.refresh(transaction)
+def create_transaction(
+    session: Session, data: TransactionIn
+) -> Transaction:
+    budget = session.exec(select(Budget).where(Budget.name == data.budget)).first()
+    budget.transaction += 1
+    if not budget:
+        raise HTTPException(status_code=404, detail="Budget not found")
 
-  return transaction
+    transaction = Transaction(
+        budget=budget,
+        description=data.description,
+        amount=data.amount,
+    )
+    session.add(transaction)
+    session.commit()
+    session.refresh(transaction)
+
+    return transaction
