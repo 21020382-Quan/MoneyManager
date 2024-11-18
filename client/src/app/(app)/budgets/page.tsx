@@ -4,9 +4,8 @@ import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import BudgetDialog from './_components/BudgetDialog';
 import BudgetItem, { BudgetItemInfo } from './_components/BudgetItem';
-import { useUser } from '@clerk/nextjs';
 
-type AddBudgetFunction = (newBudget: BudgetItemInfo) => void;
+export type AddBudgetFunction = (newBudget: BudgetItemInfo) => void;
 
 export default function Budgets() {
   const { toast } = useToast();

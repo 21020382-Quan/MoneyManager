@@ -17,14 +17,14 @@ import { Label } from '@radix-ui/react-label';
 import EmojiPicker from 'emoji-picker-react';
 import { LucideEdit } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { BudgetItemInfo } from '../../../_components/BudgetItem';
+import { EditBudgetFunction } from '../page';
 
 interface EditBudgetDialogProps {
   id: string;
   prevIcon: string;
   prevName: string;
   prevAmount: number;
-  onEditBudget: (newBudget: BudgetItemInfo) => void;
+  onEditBudget: EditBudgetFunction;
 }
 
 export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, onEditBudget }: EditBudgetDialogProps) {

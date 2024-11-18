@@ -4,17 +4,47 @@ import { DataTable } from "@/components/ui/data-table";
 import TransactionDialog from "./_components/TransactionDialog";
 import { Transaction, columns } from "./columns";
 import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
-type AddTransactionFunction = (newTransaction: Transaction) => void;
+export type AddTransactionFunction = (newTransaction: Transaction) => void;
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>();
+  const { toast } = useToast();
+  const [error, setError] = useState(false);
   const budgets = [
     'Shopping',
     'Food',
     'E-books'
   ]
   useEffect(() => {
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await fetch("http://localhost:8081/api/v1/transaction/get_all_transactions", {
+    //       method: "GET",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       }
+    //     });
+
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! status: ${response.status}`);
+    //     }
+
+    //     const data = await response.json();
+
+    //     console.log(data);
+    //     setTransactions(data.data);
+    //   } catch (error) {
+    //     toast({
+    //       title: `Failed to load page!`,
+    //       description: `${error}`,
+    //       duration: 3000,
+    //       className: "border-none bg-red-500 text-white",
+    //     });
+    //     setError(true);
+    //   }
+    // };
     const fetchData = async () => {
       const data = [
         {
@@ -41,11 +71,11 @@ export default function Transactions() {
         // ...
       ];
       setTransactions(data);
-    };
+    }
     fetchData();
   }, [])
   
-  if (transactions === undefined) {
+  if (error || transactions === undefined) {
     return (
       <div></div>
     )

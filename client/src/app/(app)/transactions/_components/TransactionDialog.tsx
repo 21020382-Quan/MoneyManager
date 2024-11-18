@@ -22,10 +22,10 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
-import { Transaction } from '../columns';
+import { AddTransactionFunction } from '../page';
 
 interface TransactionDialogProps {
-  onAddTransaction: (newTransaction: Transaction) => void;
+  onAddTransaction: AddTransactionFunction;
   budgets: string[];
 }
 

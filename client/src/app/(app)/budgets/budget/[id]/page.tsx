@@ -14,6 +14,8 @@ interface ParamsProps {
   }
 }
 
+export type EditBudgetFunction = (newBudget: BudgetItemInfo) => void;
+
 export default function Budget({ params } : ParamsProps) {
   const { toast } = useToast();
   const [budget, setBudget] = useState<BudgetItemInfo>();
@@ -53,7 +55,7 @@ export default function Budget({ params } : ParamsProps) {
     return <div></div>;
   }
 
-  const editBudget = (newBudget: BudgetItemInfo) => {
+  const editBudget: EditBudgetFunction = (newBudget) => {
     setBudget(newBudget);
   }
 

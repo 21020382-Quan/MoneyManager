@@ -16,10 +16,11 @@ import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '@radix-ui/react-dialog';
 import EmojiPicker from 'emoji-picker-react';
 import { useEffect, useRef, useState } from 'react';
-import { BudgetItemProps } from './BudgetItem';
+import { BudgetItemInfo } from './BudgetItem';
+import { AddBudgetFunction } from '../page';
 
 interface BudgetDialogProps {
-  onAddBudget: (newBudget: BudgetItemProps) => void;
+  onAddBudget: AddBudgetFunction;
 }
 
 export default function BudgetDialog({onAddBudget}: BudgetDialogProps) {
