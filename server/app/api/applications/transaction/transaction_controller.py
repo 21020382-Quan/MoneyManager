@@ -96,6 +96,7 @@ def create_transaction(
 
     transaction = Transaction(
         budget=budget,
+        budgetName=budget.name, 
         description=data.description,
         amount=data.amount,
     )
