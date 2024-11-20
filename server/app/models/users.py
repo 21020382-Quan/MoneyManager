@@ -14,10 +14,6 @@ class User(UserBase, table=True):
     createdAt: datetime
     updatedAt: datetime
 
-    # transactions: list["Transaction"] = Relationship(
-    #     back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
-    # )
-
     wallet: list["Wallet"] = Relationship(
         back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
     )

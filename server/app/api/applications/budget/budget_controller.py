@@ -36,6 +36,7 @@ def read_all_budgets(session: Session) -> BudgetListOut:
           print(response_data)
       else:
           response_data.append(budget.model_dump())
+  print(response_data)
   return BudgetListOut(data=response_data, count=count)
 
 def delete_budget(session: Session, budget_id: int):

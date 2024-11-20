@@ -45,5 +45,6 @@ model budget {
   icon        String        @db.VarChar
   name        String        @db.VarChar
   amount      Int
+  totalSpent  Int
   transaction transaction[]
 }

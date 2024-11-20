@@ -18,7 +18,7 @@ export default function Budgets() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/v1/budget/get_all_budgets", {
+        const response = await fetch("http://localhost:8081/api/v1/budget/get_all_budgets/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
