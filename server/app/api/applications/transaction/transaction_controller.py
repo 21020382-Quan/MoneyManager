@@ -6,7 +6,7 @@ from core.config import settings
 from app.models.users import User
 from app.models.budgets import Budget
 
-def read_transaction(session: Session, transaction_id: int) -> TransactionOut:
+def read_transaction(session: Session, transaction_id: int, budget_id: int) -> TransactionOut:
   db_transaction = session.exec(select(Transaction).where(Transaction.id == transaction_id)).first()
   if db_transaction is None:
     raise HTTPException(
@@ -15,21 +15,11 @@ def read_transaction(session: Session, transaction_id: int) -> TransactionOut:
     )
   
   response_data = {**db_transaction.model_dump()}
-  if db_transaction.user_id:
-    db_user = session.exec(
-      select(User).where(
-        User.id == db_transaction.user_id
-      )
-    ).first()
-    response_data = {
-      **response_data,
-      "user": db_user.model_dump(),
-    }
 
-  if db_transaction.budget_id: 
+  if db_transaction.budgetId: 
     db_budget = session.exec(
       select(Budget).where(
-        Budget.id == db_transaction.budget_id
+        Budget.id == db_transaction.budgetId
       )
     ).first()
     response_data = {
@@ -39,11 +29,11 @@ def read_transaction(session: Session, transaction_id: int) -> TransactionOut:
 
   return response_data
 
-def read_all_transactions(session: Session) -> TransactionListOut:
+def read_all_transactions(session: Session, budget_id: int) -> TransactionListOut:
   count_statement = select(func.count(Transaction.id)).select_from(Transaction)
   count = session.exec(count_statement).one()
 
-  db_transactions = session.exec(select(Transaction)).all()
+  db_transactions = session.exec(select(Transaction).where(Transaction.budgetId == budget_id)).all()
   response_data = []
   tr_list_id = [transaction.id for transaction in db_transactions if transaction.id]
   db_list_transactions = session.exec(

@@ -4,13 +4,13 @@ from app.models.budgets import Budget, BudgetIn, BudgetListOut
 from sqlmodel import Session, select, func
 from core.config import settings
 
-def read_budget(session: Session, budget_id: int) -> Budget:
+def read_budget(session: Session, budget_id: int, user_id: int) -> Budget:
   db_budget = session.get(Budget, budget_id)
   if not db_budget:
     raise HTTPException(status_code=404, detail="budget not found")
   return db_budget
 
-def read_all_budgets(session: Session) -> BudgetListOut:
+def read_all_budgets(session: Session, user_id: int) -> BudgetListOut:
   count_statement = select(func.count(Budget.id)).select_from(Budget)
   count = session.exec(count_statement).one()
 
