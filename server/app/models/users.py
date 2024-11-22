@@ -13,8 +13,7 @@ class User(UserBase, table=True):
     imageUrl: str
     createdAt: datetime
     updatedAt: datetime
-
-    wallet: list["Wallet"] = Relationship(
+    budgets: list["Budget"] = Relationship(
         back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
     )
 

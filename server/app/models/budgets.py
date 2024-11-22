@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlmodel import Field, Relationship, SQLModel
 
+
 class BudgetBase(SQLModel):
     pass
 
@@ -14,7 +15,8 @@ class Budget(BudgetBase, table=True):
     transactions: list["Transaction"] = Relationship(
         back_populates="budget", sa_relationship_kwargs={"cascade": "all, delete"}
     )
-    transaction: int = Field(default=0)
+    userId: int = Field(default=None, foreign_key="user.id")
+    user: "User" = Relationship(back_populates="budgets")
 
     def update_transaction_count(self):
         self.transaction = len(self.transactions)
