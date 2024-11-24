@@ -18,7 +18,7 @@ def create_transaction(session: SessionDep, data: TransactionIn):
 def delete_transaction(session: SessionDep, transaction_id: int):
   return TransactionController.delete_transaction(session, transaction_id)
 
-@router.put('/update/{transaction_id}')
+@router.put('/put/{transaction_id}')
 def update_transaction(session: SessionDep, transaction_id: int, transaction: Transaction):
   return TransactionController.update_transaction(session, transaction_id, transaction)
 

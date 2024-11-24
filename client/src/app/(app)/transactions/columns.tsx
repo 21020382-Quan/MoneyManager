@@ -1,20 +1,18 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { LucideEdit, LucideTrash, MoreHorizontal } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
  
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { toLocalMoney } from "@/lib/utils"
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import DeleteTransactionDialog from "./_components/DeleteTransactionDialog"
 import EditTransactionDialog from "./_components/EditTransactionDialog"
  
@@ -27,8 +25,13 @@ export type Transaction = {
   date: Date
   amount: number
 }
+
+interface ColumnProps {
+  editTransaction: (transaction: Transaction) => void;
+  deleteTransaction: (id: string) => void;
+}
  
-export const columns: ColumnDef<Transaction>[] = [
+export const columns = ({ editTransaction, deleteTransaction }: ColumnProps): ColumnDef<Transaction>[] => [
   {
     accessorKey: "budget",
     header: ({ column }) => (
@@ -79,8 +82,8 @@ export const columns: ColumnDef<Transaction>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <div className="flex flex-col gap-2">
-              <EditTransactionDialog id={row.original.id} prevBudget={row.original.budget} prevDescription={row.original.description} prevAmount={row.original.amount} />
-              <DeleteTransactionDialog id={row.original.id} description={row.original.description} />
+              <EditTransactionDialog id={row.original.id} prevBudget={row.original.budget} prevDescription={row.original.description} prevAmount={row.original.amount} onEdit={editTransaction} />
+              <DeleteTransactionDialog id={row.original.id} description={row.original.description} onDelete={deleteTransaction} />
             </div>
           </DropdownMenuContent>
         </DropdownMenu>

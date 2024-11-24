@@ -61,7 +61,7 @@ export default function DeleteBudgetDialog({ id, name }: DeleteBudgetDialogProps
     <Dialog>
       <DialogTrigger asChild>
         <Button 
-          className="min-w-32 w-full bg-red-500 font-bold text-lg h-full hover:text-red-100 hover:bg-red-500"
+          className="min-w-32 w-full bg-red-500 hover:bg-red-500 font-bold text-lg h-full"
         >
           <LucideTrash />
           <span>Delete</span>
@@ -76,7 +76,7 @@ export default function DeleteBudgetDialog({ id, name }: DeleteBudgetDialogProps
           <DialogClose asChild>
             <Button
               type="submit"
-              className="hover:text-red-100 hover:bg-red-500 bg-red-500 border rounded-full"
+              className="hover:bg-red-500 bg-red-500 border rounded-full"
               onClick={handleDeleteBudget}
             >
               Delete

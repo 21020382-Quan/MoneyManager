@@ -14,13 +14,15 @@ import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { LucideTrash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { DeleteTransactionFunction } from '../page';
 
 interface DeleteTransactionDialogProps {
   id: string;
   description: string;
+  onDelete: DeleteTransactionFunction
 }
 
-export default function DeleteTransactionDialog({ id, description }: DeleteTransactionDialogProps) {
+export default function DeleteTransactionDialog({ id, description, onDelete }: DeleteTransactionDialogProps) {
   const { toast } = useToast();
   const router = useRouter(); // Initialize useRouter
 
@@ -41,6 +43,9 @@ export default function DeleteTransactionDialog({ id, description }: DeleteTrans
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      const transaction = await response.json();
+      onDelete(id);
+
       toast({
         title: "Delete transaction successfully!",
         duration: 3000,
@@ -59,15 +64,15 @@ export default function DeleteTransactionDialog({ id, description }: DeleteTrans
   return (
     <Dialog>
       <DialogTrigger asChild>
-      <Button className="bg-red-500 font-bold hover:text-red-100 hover:bg-red-500">
+      <div className="flex flex-row gap-2 hover:bg-secondary p-2 hover:cursor-pointer">
         <LucideTrash />
         <span>Delete</span>
-        </Button>
+      </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Delete '{description}' transaction</DialogTitle>
-          <DialogDescription>Do you want to delete this transaction? Once this action is finished, it cannot be reverted.</DialogDescription>
+          <DialogDescription>Do you want to delete this transaction? <br/> Once this action is finished, it cannot be reverted.</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
