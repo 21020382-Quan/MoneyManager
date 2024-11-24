@@ -8,14 +8,14 @@ datasource db {
 }
 
 model user {
-  id          Int           @id @default(autoincrement())
-  email       String        @db.VarChar
-  clerkUserId String        @db.VarChar
-  name        String        @db.VarChar
-  imageUrl    String        @db.VarChar
-  createdAt   DateTime      @db.Timestamp(6)
-  updatedAt   DateTime      @updatedAt @db.Timestamp(6)
-  transaction transaction[]
+  id          Int      @id @default(autoincrement())
+  email       String   @db.VarChar
+  clerkUserId String   @db.VarChar
+  name        String   @db.VarChar
+  imageUrl    String   @db.VarChar
+  createdAt   DateTime @db.Timestamp(6)
+  updatedAt   DateTime @updatedAt @db.Timestamp(6)
+  budget      budget[]
 }
 
 model alembic_version {
@@ -26,18 +26,9 @@ model transaction {
   id          Int      @id @default(autoincrement())
   description String   @db.VarChar
   date        DateTime @db.Timestamp(6)
-  user_id     Int
   amount      Int?
-  budget_id   Int
-  budget      budget   @relation(fields: [budget_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user        user     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model wallet {
-  id         Int      @id @default(autoincrement())
-  name       String   @db.VarChar
-  value      Int
-  created_at DateTime @db.Timestamp(6)
+  budgetId    Int
+  budget      budget   @relation(fields: [budgetId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model budget {
@@ -45,6 +36,8 @@ model budget {
   icon        String        @db.VarChar
   name        String        @db.VarChar
   amount      Int
-  totalSpent  Int
+  totalSpent  Int?
+  userId      Int
+  user        user          @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   transaction transaction[]
 }

@@ -8,16 +8,16 @@ from core.config import settings
 router = APIRouter()
 
 @router.get('/get/{budget_id}')
-def get_budget(session: SessionDep, budget_id: int):
-  return budgetController.read_budget(session, budget_id)
+def get_budget(session: SessionDep, budget_id: int, user_id: int):
+  return budgetController.read_budget(session, budget_id, user_id)
 
 @router.post('')
 def create_budget(session: SessionDep, budget: BudgetIn):
   return budgetController.create_budget(session, budget)
 
 @router.get('/get_all_budgets')
-def get_all_budgets(session: SessionDep) -> BudgetListOut: 
-  return budgetController.read_all_budgets(session)
+def get_all_budgets(session: SessionDep, user_id: int) -> BudgetListOut: 
+  return budgetController.read_all_budgets(session, user_id)
 
 @router.delete('/delete/{budget_id}')
 def delete_budget(session: SessionDep, budget_id: int):

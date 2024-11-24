@@ -3,9 +3,10 @@ from fastapi import File, HTTPException, UploadFile
 from app.models.budgets import Budget, BudgetIn, BudgetListOut
 from sqlmodel import Session, select, func
 from core.config import settings
+from app.models.users import User
 
 def read_budget(session: Session, budget_id: int, user_id: int) -> Budget:
-  db_budget = session.get(Budget, budget_id)
+  db_budget = session.exec(select(Budget).where((Budget.userId == user_id) & (Budget.id == budget_id))).first()
   if not db_budget:
     raise HTTPException(status_code=404, detail="budget not found")
   return db_budget
@@ -14,7 +15,7 @@ def read_all_budgets(session: Session, user_id: int) -> BudgetListOut:
   count_statement = select(func.count(Budget.id)).select_from(Budget)
   count = session.exec(count_statement).one()
 
-  db_budgets = session.exec(select(Budget)).all()
+  db_budgets = session.exec(select(Budget).where(Budget.userId == user_id)).all()
   response_data = []
   bg_list_id = [factor.id for factor in db_budgets if factor.id]
   db_list_budgets = session.exec(
@@ -66,7 +67,8 @@ def create_budget(session: Session, data: BudgetIn) -> Budget:
   budget = Budget(
     icon=data.icon, 
     name=data.name, 
-    amount=data.amount
+    amount=data.amount,
+    userId= data.userId
   )
   session.add(budget)
   session.commit()

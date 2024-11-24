@@ -2,13 +2,15 @@ from datetime import datetime
 
 from sqlmodel import Field, Relationship, SQLModel
 
+
+
 class UserBase(SQLModel):
     pass
 
 class User(UserBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    clerkUserId: str  
     email: str
+    clerkUserId: str  
     name: str
     imageUrl: str
     createdAt: datetime
