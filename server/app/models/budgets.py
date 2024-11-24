@@ -11,7 +11,7 @@ class Budget(BudgetBase, table=True):
     icon: str
     name: str
     amount: int
-    totalSpent: int = Field(default=None, nullable=True)
+    totalSpent: int = Field(default=0, nullable=True)
     transactions: list["Transaction"] = Relationship(
         back_populates="budget", sa_relationship_kwargs={"cascade": "all, delete"}
     )
@@ -35,6 +35,7 @@ class BudgetIn(BudgetBase):
     icon: str
     name: str
     amount: int
+    userId: int
 
 class BudgetListOut(SQLModel): 
     data: list[Budget]
