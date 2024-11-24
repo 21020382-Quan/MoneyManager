@@ -57,18 +57,18 @@ def check_health():
         "health": "ok",
     }
 
-origins = [
-    "http://localhost:3000",
-    "http://localhost:8081",
-]
+# origins = [
+#     "http://localhost:3000",
+#     "http://localhost:8081",
+# ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 # if settings.BACKEND_CORS_ORIGINS:
 #     app.add_middleware(
 #         CORSMiddleware,

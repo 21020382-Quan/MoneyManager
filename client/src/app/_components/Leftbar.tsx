@@ -7,6 +7,7 @@ import { UserButton } from "@clerk/nextjs"
 import { useState } from "react"
 import { Calendar } from "@nextui-org/calendar";
 import { today, getLocalTimeZone } from "@internationalized/date";
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export default function Leftbar() {
   const items = [
@@ -45,8 +46,9 @@ export default function Leftbar() {
           </LeftbarItem>
         ))}
       </div>
-      <div className='pl-2'>
+      <div className='pl-2 flex justify-between'>
         <UserButton />
+        <ThemeToggle />
       </div>
     </div>
   )

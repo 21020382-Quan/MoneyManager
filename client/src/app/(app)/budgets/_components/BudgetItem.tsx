@@ -8,8 +8,9 @@ import {
 import { cn, toLocalMoney } from '@/lib/utils';
 import { BudgetTransaction } from '../budget/[id]/columns';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
-export type BudgetItemProps = {
+export type BudgetItemInfo = {
   id: string;
   icon: string;
   name: string;
@@ -20,16 +21,16 @@ export type BudgetItemProps = {
 };
 
 interface BudgetProps extends React.HTMLAttributes<HTMLDivElement> {
-  budget: BudgetItemProps;
+  budget: BudgetItemInfo;
   link?: string;
 };
 
 export default function BudgetItem({budget, link, className} : BudgetProps) {
   const content = (
-    <div className={cn("p-4 border rounded-lg w-[300px] h-[150px] hover:bg-blue-100 flex flex-col justify-between transition-colors duration-120", className)}>
+    <div className={cn("p-4 border rounded-lg w-[300px] h-[150px] flex flex-col justify-between transition-colors duration-120", className)}>
       <div className="flex items-center justify-between">
         <div className="flex gap-2 items-center max-w-[150px] overflow-clip">
-          <div className="p-2 bg-slate-300 rounded-full text-xl">
+          <div className="p-2 bg-secondary rounded-full text-xl">
             {budget.icon}
           </div>
           <div>
@@ -52,7 +53,7 @@ export default function BudgetItem({budget, link, className} : BudgetProps) {
           <p className="text-slate-500"></p>
           <p className="text-slate-500 text-xs">{toLocalMoney(budget.amount - (budget.totalSpent || 0))} remaining</p>
         </div>
-        <div className="w-full bg-slate-300 h-2 rounded-full">
+        <div className="w-full bg-secondary h-2 rounded-full">
           <div 
             className="bg-blue-500 h-2 rounded-full" 
             style={{ width: `${(budget.totalSpent || 0) / budget.amount}`}}>

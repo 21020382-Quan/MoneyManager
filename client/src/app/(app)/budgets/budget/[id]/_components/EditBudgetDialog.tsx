@@ -16,24 +16,24 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import { Label } from '@radix-ui/react-label';
 import EmojiPicker from 'emoji-picker-react';
 import { LucideEdit } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { EditBudgetFunction } from '../page';
 
 interface EditBudgetDialogProps {
   id: string;
   prevIcon: string;
   prevName: string;
   prevAmount: number;
+  onEditBudget: EditBudgetFunction;
 }
 
-export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount }: EditBudgetDialogProps) {
+export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, onEditBudget }: EditBudgetDialogProps) {
   const [icon, setIcon] = useState<string>(prevIcon);
   const [openEmoji, setOpenEmoji] = useState(false);
   const [name, setName] = useState<string>(prevName);
   const [amount, setAmount] = useState<number>(prevAmount);
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();
-  const router = useRouter();
 
   const handleSelectEmoji = (e: { emoji: string }) => {
     setIcon(e.emoji);
@@ -73,6 +73,9 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount }:
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      const newBudget = await response.json();
+      onEditBudget(newBudget);
+
       toast({
         title: "Edit budget successfully!",
         duration: 3000,
@@ -101,7 +104,7 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount }:
     <Dialog>
       <DialogTrigger asChild>
         <Button 
-          className="min-w-32 w-full bg-yellow-500 font-bold text-lg h-full hover:text-yellow-100 hover:bg-yellow-500"
+          className="min-w-32 w-full bg-yellow-500 hover:bg-yellow-500 font-bold text-lg h-full"
         >
           <LucideEdit />
           <span>Edit</span>
@@ -109,7 +112,7 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount }:
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit '{name}' budget</DialogTitle>
+          <DialogTitle>Edit '{prevName}' budget</DialogTitle>
           <DialogDescription>Update the information of this budget</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -157,7 +160,7 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount }:
             <Button
               disabled={!(name && amount && icon) || (name === prevName && amount === prevAmount && icon === prevIcon)}
               type="submit"
-              className="hover:text-yellow-100 hover:bg-yellow-500 bg-yellow-500 border rounded-full"
+              className="hover:bg-yellow-500 bg-yellow-500 border rounded-full"
               onClick={handleEditBudget}
             >
               Edit

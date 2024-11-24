@@ -11,23 +11,22 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { Label } from '@radix-ui/react-label';
-import EmojiPicker from 'emoji-picker-react';
 import { LucideEdit } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { EditTransactionFunction } from '../page';
 
 interface EditTransactionDialogProps {
   id: string;
   prevBudget: string;
   prevDescription: string;
   prevAmount: number;
+  onEdit: EditTransactionFunction;
 }
 
-export default function EditTransactionDialog({ id, prevBudget, prevDescription, prevAmount }: EditTransactionDialogProps) {
+export default function EditTransactionDialog({ id, prevBudget, prevDescription, prevAmount, onEdit }: EditTransactionDialogProps) {
   const [budget, setBudget] = useState<string>(prevBudget);
   const [description, setDescription] = useState<string>(prevDescription);
   const [amount, setAmount] = useState<number>(prevAmount);
@@ -53,6 +52,9 @@ export default function EditTransactionDialog({ id, prevBudget, prevDescription,
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      const newTransaction = await response.json();
+      onEdit(newTransaction);
+
       toast({
         title: "Edit transaction successfully!",
         duration: 3000,
@@ -71,14 +73,14 @@ export default function EditTransactionDialog({ id, prevBudget, prevDescription,
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-yellow-500 font-bold hover:text-yellow-100 hover:bg-yellow-500">
-        <LucideEdit />
-        <span>Edit</span>
-        </Button>
+        <div className="flex flex-row gap-2 hover:bg-secondary p-2 hover:cursor-pointer">
+          <LucideEdit />
+          <span>Edit</span>
+        </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit transaction</DialogTitle>
+          <DialogTitle>Edit '{prevDescription}' transaction</DialogTitle>
           <DialogDescription>Update the information of this Transaction</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -123,7 +125,7 @@ export default function EditTransactionDialog({ id, prevBudget, prevDescription,
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              disabled={!(budget && description && amount) || (budget === prevBudget && amount === prevAmount && description === prevDescription)}
+              disabled={!(budget && description && amount) && (budget === prevBudget && amount === prevAmount && description === prevDescription)}
               type="submit"
               className="hover:text-yellow-100 hover:bg-yellow-500 bg-yellow-500 border rounded-full"
               onClick={handleEditTransaction}

@@ -26,6 +26,12 @@ export type BudgetTransaction = {
  
 export const columns: ColumnDef<BudgetTransaction>[] = [
   {
+    accessorKey: "budget",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Budget" />
+    ),
+  },
+  {
     accessorKey: "description",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Description" />

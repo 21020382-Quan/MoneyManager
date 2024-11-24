@@ -3,17 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import BudgetDialog from './_components/BudgetDialog';
-import BudgetItem, { BudgetItemProps } from './_components/BudgetItem';
-import { useUser } from '@clerk/nextjs';
+import BudgetItem, { BudgetItemInfo } from './_components/BudgetItem';
 
-type AddBudgetFunction = (newBudget: BudgetItemProps) => void;
+export type AddBudgetFunction = (newBudget: BudgetItemInfo) => void;
 
 export default function Budgets() {
   const { toast } = useToast();
-  const [budgets, setBudgets] = useState<BudgetItemProps[]>();
+  const [budgets, setBudgets] = useState<BudgetItemInfo[]>();
   const [error, setError] = useState(false);
-  const user = useUser();
-  console.log(user.user?.id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +43,6 @@ export default function Budgets() {
     fetchData();
   }, []);
 
-  console.log(budgets);
   if (error || budgets === undefined) {
     return <div></div>;
   }

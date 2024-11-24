@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
 import {NextUIProvider} from "@nextui-org/system";
+import { ThemeProvider } from "@/components/theme-provider"
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -30,10 +31,15 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <NextUIProvider>
-            <div>{children}</div>
-            <Toaster />
-          </NextUIProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster /> 
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
