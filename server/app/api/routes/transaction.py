@@ -23,5 +23,5 @@ def update_transaction(session: SessionDep, transaction_id: int, transaction: Tr
   return TransactionController.update_transaction(session, transaction_id, transaction)
 
 @router.get('/get_all_transactions')
-def get_all_transactions(session: SessionDep) -> TransactionListOut: 
-  return TransactionController.read_all_transactions(session)
+def get_all_transactions(session: SessionDep, user_id: int) -> TransactionListOut: 
+  return TransactionController.read_all_transactions(session, user_id)

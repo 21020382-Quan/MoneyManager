@@ -6,8 +6,8 @@ from core.config import settings
 from app.models.users import User
 from app.models.budgets import Budget
 
-def read_transaction(session: Session, transaction_id: int, budget_id: int) -> TransactionOut:
-  db_transaction = session.exec(select(Transaction).where(Transaction.id == transaction_id)).first()
+def read_transaction(session: Session, transaction_id: int) -> TransactionOut:
+  db_transaction = session.exec(select(Transaction).where(Transaction.id == transaction_id)).all() 
   if db_transaction is None:
     raise HTTPException(
       status_code=status.HTTP_404_NOT_FOUND,
@@ -29,11 +29,11 @@ def read_transaction(session: Session, transaction_id: int, budget_id: int) -> T
 
   return response_data
 
-def read_all_transactions(session: Session, budget_id: int) -> TransactionListOut:
+def read_all_transactions(session: Session, user_id: int) -> TransactionListOut:
   count_statement = select(func.count(Transaction.id)).select_from(Transaction)
   count = session.exec(count_statement).one()
 
-  db_transactions = session.exec(select(Transaction).where(Transaction.budgetId == budget_id)).all()
+  db_transactions = session.exec(select(Transaction).where(Transaction.userId == user_id)).all()
   response_data = []
   tr_list_id = [transaction.id for transaction in db_transactions if transaction.id]
   db_list_transactions = session.exec(
@@ -80,12 +80,12 @@ def create_transaction(
     session: Session, data: TransactionIn
 ) -> Transaction:
     budget = session.exec(select(Budget).where(Budget.name == data.budget)).first()
-    budget.transaction += 1
     if not budget:
         raise HTTPException(status_code=404, detail="Budget not found")
 
     transaction = Transaction(
         budget=budget,
+        userId=budget.userId,
         budgetName=budget.name, 
         description=data.description,
         amount=data.amount,
