@@ -15,7 +15,7 @@ def get_budget(session: SessionDep, budget_id: int, user_id: int):
 def create_budget(session: SessionDep, budget: BudgetIn):
   return budgetController.create_budget(session, budget)
 
-@router.get('/get_all_budgets')
+@router.get('/get_all_budgets/{user_id}')
 def get_all_budgets(session: SessionDep, user_id: int) -> BudgetListOut: 
   return budgetController.read_all_budgets(session, user_id)
 
