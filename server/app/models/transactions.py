@@ -12,6 +12,7 @@ class Transaction(TransactionBase, table=True):
     description: str 
     date: datetime = Field(default=datetime.now())
     amount: int | None 
+    userId: int | None
     budgetId: int = Field(default=None, foreign_key="budget.id")
     budget: "Budget" = Relationship(back_populates="transactions")
 

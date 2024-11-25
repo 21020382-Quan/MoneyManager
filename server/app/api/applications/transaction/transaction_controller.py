@@ -33,8 +33,7 @@ def read_all_transactions(session: Session, user_id: int) -> TransactionListOut:
   count_statement = select(func.count(Transaction.id)).select_from(Transaction)
   count = session.exec(count_statement).one()
 
-  db_budget = session.exec(select(Budget).where(Budget.userId == user_id)).first()
-  db_transactions = session.exec(select(Transaction).where(Transaction.budget == db_budget)).all()
+  db_transactions = session.exec(select(Transaction).where(Transaction.userId == user_id)).all()
   response_data = []
   tr_list_id = [transaction.id for transaction in db_transactions if transaction.id]
   db_list_transactions = session.exec(
@@ -86,6 +85,7 @@ def create_transaction(
 
     transaction = Transaction(
         budget=budget,
+        userId=budget.userId,
         budgetName=budget.name, 
         description=data.description,
         amount=data.amount,
