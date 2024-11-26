@@ -15,19 +15,17 @@ export default function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>();
   const { toast } = useToast();
   const [error, setError] = useState(false);
-  const user = useUser();
+  const { user } = useUser();
   const budgets = [
     'Shopping',
     'Food',
     'E-books'
   ]
   useEffect(() => {
+    if (!user) return;
     const fetchData = async () => {
       try {
-        const request = {
-          id: user.user?.id,
-        }
-        const response = await fetch("http://localhost:8081/api/v1/transaction/get_all_transactions", {
+        const response = await fetch(`http://localhost:8081/api/v1/transaction/get_all_transactions/${user.id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +78,7 @@ export default function Transactions() {
     //   setTransactions(data);
     // }
     fetchData();
-  }, [])
+  }, [user])
   
   if (error || transactions === undefined) {
     return (

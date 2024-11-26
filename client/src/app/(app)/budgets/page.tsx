@@ -20,7 +20,7 @@ export default function Budgets() {
     const fetchData = async () => {
       try {
         console.log(user);
-        const response = await fetch(`http://localhost:8081/api/v1/budget/get_all_budgets?clerk_id=${user.id}`, {
+        const response = await fetch(`http://localhost:8081/api/v1/budget/get_all_budgets/${user.id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
