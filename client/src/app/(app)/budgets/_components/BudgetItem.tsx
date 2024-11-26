@@ -8,16 +8,15 @@ import {
 import { cn, toLocalMoney } from '@/lib/utils';
 import { BudgetTransaction } from '../budget/[id]/columns';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 
 export type BudgetItemInfo = {
   id: string;
   icon: string;
   name: string;
-  transaction: number;
   amount: number;
   totalSpent: number;
-  transactionsList?: BudgetTransaction[];
+  userId: string;
+  transaction: BudgetTransaction[];
 };
 
 interface BudgetProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -42,7 +41,7 @@ export default function BudgetItem({budget, link, className} : BudgetProps) {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <p className="text-sm">{budget.transaction} transactions</p>
+            <p className="text-sm">{budget.transaction.length} transactions</p>
           </div>
         </div>
         <h1 className="font-bold text-blue-500">{toLocalMoney(budget.amount)}</h1>
