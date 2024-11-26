@@ -11,11 +11,12 @@ def read_budget(session: Session, budget_id: int, user_id: int) -> Budget:
     raise HTTPException(status_code=404, detail="budget not found")
   return db_budget
 
-def read_all_budgets(session: Session, user_id: int) -> BudgetListOut:
+def read_all_budgets(session: Session, clerk_id: str) -> BudgetListOut:
   count_statement = select(func.count(Budget.id)).select_from(Budget)
   count = session.exec(count_statement).one()
 
-  db_budgets = session.exec(select(Budget).where(Budget.userId == user_id)).all()
+  user = session.exec(select(User).where(User.clerkUserId == clerk_id)).first()
+  db_budgets = session.exec(select(Budget).where(Budget.user == user)).all()
   response_data = []
   bg_list_id = [factor.id for factor in db_budgets if factor.id]
   db_list_budgets = session.exec(

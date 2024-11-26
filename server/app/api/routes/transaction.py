@@ -22,9 +22,9 @@ def delete_transaction(session: SessionDep, transaction_id: int):
 def update_transaction(session: SessionDep, transaction_id: int, transaction: Transaction):
   return TransactionController.update_transaction(session, transaction_id, transaction)
 
-@router.get('/get_all_transactions/{user_id}')
-def get_all_transactions(session: SessionDep, user_id: int) -> TransactionListOut: 
-  return TransactionController.read_all_transactions(session, user_id)
+@router.get('/get_all_transactions/{clerk_id}')
+def get_all_transactions(session: SessionDep, clerk_id: int) -> TransactionListOut: 
+  return TransactionController.read_all_transactions(session, clerk_id)
 
 @router.get('/get_all_transactions_by_budget/{budget_id}')
 def get_all_transactions_by_budget(session: SessionDep, budget_id: int) -> TransactionListOut: 

@@ -29,11 +29,12 @@ def read_transaction(session: Session, user_id: int, transaction_id: int) -> Tra
 
   return response_data
 
-def read_all_transactions(session: Session, user_id: int) -> TransactionListOut:
+def read_all_transactions(session: Session, clerk_id: int) -> TransactionListOut:
   count_statement = select(func.count(Transaction.id)).select_from(Transaction)
   count = session.exec(count_statement).one()
 
-  db_transactions = session.exec(select(Transaction).where(Transaction.userId == user_id)).all()
+  user = session.exec(select(User).where(User.clerkUserId == clerk_id)).first()
+  db_transactions = session.exec(select(Transaction).where(Transaction.userId == user.id)).all()
   response_data = []
   tr_list_id = [transaction.id for transaction in db_transactions if transaction.id]
   db_list_transactions = session.exec(
