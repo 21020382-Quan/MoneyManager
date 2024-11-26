@@ -18,6 +18,7 @@ import EmojiPicker from 'emoji-picker-react';
 import { useEffect, useRef, useState } from 'react';
 import { BudgetItemInfo } from './BudgetItem';
 import { AddBudgetFunction } from '../page';
+import { useUser } from '@clerk/nextjs';
 
 interface BudgetDialogProps {
   onAddBudget: AddBudgetFunction;
@@ -30,6 +31,7 @@ export default function BudgetDialog({onAddBudget}: BudgetDialogProps) {
   const [amount, setAmount] = useState<number>(0);
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();
+  const { user } = useUser();
 
   const handleSelectEmoji = (e: { emoji: string }) => {
     setIcon(e.emoji);
@@ -50,14 +52,14 @@ export default function BudgetDialog({onAddBudget}: BudgetDialogProps) {
   };
 
   const handleCreateBudget = async () => {
-    // TODO: send data to server
-    const data = {
-      icon,
-      name,
-      amount
-    }
-    
     try {
+      if (!user) throw new Error("Error: User is not logged in!")
+      const data = {
+        icon,
+        name,
+        amount,
+        clerkId: user.id,
+     }
       const response = await fetch("http://localhost:8081/api/v1/budget", {  
         method: "POST",
         headers: {

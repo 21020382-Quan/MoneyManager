@@ -23,7 +23,7 @@ export default function Dashboard({ spendingRange }: DashboardInterface) {
   const [budgets, setBudgets] = useState<BudgetItemInfo[]>();
   const { toast } = useToast();
   const [error, setError] = useState(false);
-  const user = useUser();
+  const { user } = useUser();
   const searchParams = useSearchParams(); // Hook to get search params
   const spendingRangeParam = searchParams.get("spendingRange") || spendingRange; // Get the "spendingRange" param
 
@@ -76,6 +76,7 @@ export default function Dashboard({ spendingRange }: DashboardInterface) {
   }, [spendingRangeParam]);
 
   useEffect(() => {
+    if (!user) return;
     const fetchData = async () => {
       try {
         // Example data for testing
@@ -130,21 +131,21 @@ export default function Dashboard({ spendingRange }: DashboardInterface) {
           },
         ];
   
-        // const response = await fetch(`http://localhost:8081/api/v1/transaction/get_all_spendings?clerkUserId=${user.user?.id}&range=${spendingRangeParam}`, {
-        //   method: "GET",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        // });
+        const response = await fetch(`http://localhost:8081/api/v1/budget/get_all_budgets/${user.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
   
-        // if (!response.ok) {
-        //   throw new Error(`HTTP error! status: ${response.status}`);
-        // }
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
   
-        // const data = await response.json();
+        const data = await response.json();
   
-        setBudgets(budgetData);
-        console.log(budgetData);
+        setBudgets(data.data);
+        console.log(budgets);
         setError(false);
       } catch (error) {
         toast({
@@ -157,7 +158,7 @@ export default function Dashboard({ spendingRange }: DashboardInterface) {
       }
     };
     fetchData();
-  }, []);
+  }, [user]);
 
   if (error || spendings === undefined || budgets === undefined) {
     return <div></div>;
