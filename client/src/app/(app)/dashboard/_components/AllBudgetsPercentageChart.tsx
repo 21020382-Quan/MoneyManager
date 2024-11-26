@@ -10,6 +10,7 @@ interface ChartProps {
 }
 
 export default function AllBudgetsPercentageChart({budgets} : ChartProps) {
+  console.log(budgets);
   const data = budgets.map((budget) => {
     return {
       amount: budget.amount,

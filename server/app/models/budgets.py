@@ -35,7 +35,7 @@ class BudgetIn(BudgetBase):
     icon: str
     name: str
     amount: int
-    userId: int
+    clerkId: str
 
 class BudgetListOut(SQLModel): 
     data: list[Budget]

@@ -25,6 +25,7 @@ interface BudgetProps extends React.HTMLAttributes<HTMLDivElement> {
 };
 
 export default function BudgetItem({budget, link, className} : BudgetProps) {
+  console.log(budget);
   const content = (
     <div className={cn("p-4 border rounded-lg w-[300px] h-[150px] flex flex-col justify-between transition-colors duration-120", className)}>
       <div className="flex items-center justify-between">
@@ -41,7 +42,7 @@ export default function BudgetItem({budget, link, className} : BudgetProps) {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <p className="text-sm">{budget.transaction.length} transactions</p>
+            <p className="text-sm">{} transactions</p>
           </div>
         </div>
         <h1 className="font-bold text-blue-500">{toLocalMoney(budget.amount)}</h1>
