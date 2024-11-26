@@ -4,7 +4,6 @@ export default function Rightbar() {
       <div>
         
       </div>
-      <div>Latest spendings</div>
     </div>
   )
 }

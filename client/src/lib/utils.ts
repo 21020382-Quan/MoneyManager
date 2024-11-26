@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
+import { endOfDay, startOfDay, subDays } from "date-fns";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -13,4 +14,27 @@ export function toLocalMoney(amount: number) {
     maximumFractionDigits: 0,
   }).format(amount)
   return formatted;
+}
+
+export const rangeOptions = {
+  lastWeek: {
+    label: "Last 7 days",
+    startDate: startOfDay(subDays(new Date(), 6)),
+    endDate: endOfDay(new Date()),
+  },
+  lastMonth: {
+    label: "Last 30 days",
+    startDate: startOfDay(subDays(new Date(), 29)),
+    endDate: endOfDay(new Date()),
+  },
+  lastYear: {
+    label: "Last 365 days",
+    startDate: startOfDay(subDays(new Date(), 364)),
+    endDate: endOfDay(new Date()),
+  },
+  allTime: {
+    label: "All time",
+    startDate: null,
+    endDate: endOfDay(new Date()),
+  }
 }

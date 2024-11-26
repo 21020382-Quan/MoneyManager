@@ -16,16 +16,17 @@ export async function GET() {
     return new NextResponse('User not exist', { status: 404 });
   }
 
-  let user = await prisma.user.findUnique({
+  let user = await prisma.user.findFirst({
     where: { clerkUserId: clerkUser.id }
   });
   if (!user) {
     user = await prisma.user.create({
       data: {
         clerkUserId: clerkUser.id,
-        name: `${clerkUser.firstName} ${clerkUser.lastName}`,
+        name: clerkUser.fullName || '',
         imageUrl: clerkUser.imageUrl,
         email: clerkUser.emailAddresses[0].emailAddress,
+        createdAt: new Date(),
       }
     })
   }

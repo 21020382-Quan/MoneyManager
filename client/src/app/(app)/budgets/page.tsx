@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import BudgetDialog from './_components/BudgetDialog';
 import BudgetItem, { BudgetItemInfo } from './_components/BudgetItem';
+import { useUser } from '@clerk/nextjs';
 
 export type AddBudgetFunction = (newBudget: BudgetItemInfo) => void;
 
@@ -11,11 +12,15 @@ export default function Budgets() {
   const { toast } = useToast();
   const [budgets, setBudgets] = useState<BudgetItemInfo[]>();
   const [error, setError] = useState(false);
+  const { user } = useUser();
 
   useEffect(() => {
+    if (!user) return ;
+
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/v1/budget/get_all_budgets/", {
+        console.log(user);
+        const response = await fetch(`http://localhost:8081/api/v1/budget/get_all_budgets?clerk_id=${user.id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -41,7 +46,7 @@ export default function Budgets() {
     };
 
     fetchData();
-  }, []);
+  }, [user]);
 
   if (error || budgets === undefined) {
     return <div></div>;
