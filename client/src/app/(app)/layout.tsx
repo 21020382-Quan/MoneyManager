@@ -1,7 +1,6 @@
 import localFont from "next/font/local";
 import "../globals.css"
 import Leftbar from "../_components/Leftbar";
-import Rightbar from "../_components/Rightbar";
 
 const geistSans = localFont({
   src: "../../fonts/GeistVF.woff",
@@ -20,12 +19,11 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <div className={geistSans.variable}>
       <Leftbar />
-        <div className='ml-60 mr-60 p-12 min-h-screen'>
-          {children}
-        </div>
-      <Rightbar />
-    </>
+      <div className="lg:ml-64 p-8 pl-12 lg:pl-8 min-h-screen transition-all">
+        {children}
+      </div>
+    </div>
   );
 }
