@@ -60,7 +60,7 @@ export default function Budgets() {
       <div>
         <h1 className="font-bold text-3xl">All budgets</h1>
       </div>
-      <div className="mt-8 pb-24 flex flex-wrap gap-4 justify-around">
+      <div className="mt-8 pb-24 grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4 justify-around">
         {budgets.map((budget, index) => (
           <BudgetItem budget={budget} key={index} link={`/budgets/budget/${budget.id}`} />
         ))}

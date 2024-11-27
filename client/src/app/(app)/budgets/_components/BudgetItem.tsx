@@ -8,6 +8,7 @@ import {
 import { cn, toLocalMoney } from '@/lib/utils';
 import { BudgetTransaction } from '../budget/[id]/columns';
 import Link from 'next/link';
+import { Card } from '@/components/ui/card';
 
 export type BudgetItemInfo = {
   id: string;
@@ -27,7 +28,8 @@ interface BudgetProps extends React.HTMLAttributes<HTMLDivElement> {
 export default function BudgetItem({budget, link, className} : BudgetProps) {
   console.log(budget);
   const content = (
-    <div className={cn("p-4 border rounded-lg w-[300px] h-[150px] flex flex-col justify-between transition-colors duration-120", className)}>
+    <Card>
+    <div className={cn("p-4 w-full h-40 flex flex-col justify-between transition-colors duration-120", className)}>
       <div className="flex items-center justify-between">
         <div className="flex gap-2 items-center max-w-[150px] overflow-clip">
           <div className="p-2 bg-secondary rounded-full text-xl">
@@ -61,6 +63,7 @@ export default function BudgetItem({budget, link, className} : BudgetProps) {
         </div>
       </div>
     </div>
+    </Card>
   )
   return (
     link ? <Link href={link}>{content}</Link> : content

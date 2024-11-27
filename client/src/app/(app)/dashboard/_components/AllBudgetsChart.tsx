@@ -25,7 +25,7 @@ export default function AllBudgetsBarChart({budgets} : ChartProps) {
         <CardTitle>All budgets (amount)</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width={350} height={350}>
+        <ResponsiveContainer width="100%" height={400}>
           <BarChart data={data} margin={{left: 50, top: 10, bottom: 10, right: 10}}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />

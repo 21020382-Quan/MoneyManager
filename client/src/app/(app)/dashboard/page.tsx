@@ -169,9 +169,9 @@ export default function Dashboard({ spendingRange }: DashboardInterface) {
       <div>
         <h1 className="font-bold text-3xl">Dashboard</h1>
       </div>
-      <div className="flex flex-col gap-4 mt-8">
+      <div className="flex flex-col gap-8 mt-8">
         <AllSpendingsChart spendings={spendings} />
-        <div className="flex flex-wrap gap-4 justify-between items-center">
+        <div className="grid lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-8 justify-between items-center">
           <AllBudgetsBarChart budgets={budgets} />
           <AllBudgetsPercentageChart budgets={budgets} />
         </div>

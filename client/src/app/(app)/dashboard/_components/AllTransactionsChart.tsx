@@ -45,7 +45,7 @@ export default function AllSpendingsChart({spendings} : ChartProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={400}>
           <LineChart data={data} margin={{left: 50, top: 10, bottom: 10, right: 10}}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
