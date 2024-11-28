@@ -38,7 +38,7 @@ export default function DeleteBudgetDialog({ id, name }: DeleteBudgetDialogProps
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Delete budget error! Status: ${response.status}`);
       }
 
       toast({
