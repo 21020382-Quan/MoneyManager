@@ -8,6 +8,7 @@ import DeleteBudgetDialog from "./_components/DeleteBudgetDialog";
 import EditBudgetDialog from "./_components/EditBudgetDialog";
 import { useUser } from "@clerk/nextjs";
 import { columns, Transaction } from "@/app/(app)/transactions/columns";
+import TransactionDialog from "@/app/(app)/transactions/_components/TransactionDialog";
 
 interface ParamsProps {
   params: {
@@ -27,35 +28,34 @@ export default function Budget({ params } : ParamsProps) {
   const [error, setError] = useState(false);
   const { user } = useUser();
 
-  useEffect(() => {
+  const fetchData = async () => {
     if (!user) return;
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8081/api/v1/budget/get/${params.id}?clerk_id=${user.id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+    try {
+      const response = await fetch(`http://localhost:8081/api/v1/budget/get/${params.id}?clerk_id=${user.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setBudget(data);
-        
-      } catch (error) {
-        toast({
-          title: `Failed to load page!`,
-          description: `${error}`,
-          duration: 3000,
-          className: "border-none bg-red-500 text-white",
-        });
-        setError(true);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
 
+      const data = await response.json();
+      setBudget(data);
+    } catch (error) {
+      toast({
+        title: `Failed to load page!`,
+        description: `${error}`,
+        duration: 3000,
+        className: "border-none bg-red-500 text-white",
+      });
+      setError(true);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [user]);
 
@@ -76,20 +76,27 @@ export default function Budget({ params } : ParamsProps) {
 
   const editBudget: EditBudgetFunction = (newBudget) => {
     setBudget(newBudget);
+  };
+
+  const addTransaction: AddTransactionFunction = async (newTransaction) => {
+    setTransactions((prevTransactions = []) => [...prevTransactions, newTransaction])
+    await fetchData();
   }
 
-  const deleteTransaction: DeleteTransactionFunction = (id) => {
+  const deleteTransaction: DeleteTransactionFunction = async (id) => {
     setTransactions((prevTransactions = []) =>
       prevTransactions.filter((transaction) => transaction.id !== id)
     );
+    await fetchData();
   };
 
-  const editTransaction: EditTransactionFunction = (newTransaction) => {
+  const editTransaction: EditTransactionFunction = async (newTransaction) => {
     setTransactions((prevTransactions = []) => 
       prevTransactions.filter((transaction) => transaction.id !== newTransaction.id)
     );
-    setTransactions((prevTransactions = []) => [newTransaction, ...prevTransactions])
-  }
+    setTransactions((prevTransactions = []) => [newTransaction, ...prevTransactions]);
+    await fetchData();
+  };
 
   return (
     <div className="relative" style={{ minHeight: 'calc(100vh - 96px)' }}>
@@ -103,10 +110,11 @@ export default function Budget({ params } : ParamsProps) {
           <DeleteBudgetDialog id={budget.id} name={budget.name}/>
         </div>
       </div>
-      <div className="mt-8">
+      <div className="mt-8 pb-24">
         <span className="font-bold">Transactions</span>
         <DataTable columns={columns({editTransaction, deleteTransaction})} data={transactions} />
       </div>
+      <TransactionDialog onAddTransaction={addTransaction} budgets={[budget.name]} inBudget={true} />
     </div>
   );
 }
