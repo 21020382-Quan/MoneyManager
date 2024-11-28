@@ -1,15 +1,26 @@
 import base64
 from fastapi import File, HTTPException, UploadFile
+from app.models.transactions import Transaction
 from app.models.budgets import Budget, BudgetIn, BudgetListOut
 from sqlmodel import Session, select, func
 from core.config import settings
 from app.models.users import User
 
-def read_budget(session: Session, budget_id: int, user_id: int) -> Budget:
-  db_budget = session.exec(select(Budget).where((Budget.userId == user_id) & (Budget.id == budget_id))).first()
-  if not db_budget:
-    raise HTTPException(status_code=404, detail="budget not found")
-  return db_budget
+def read_budget(session: Session, budget_id: int, clerk_id: str) -> Budget:
+    user = session.exec(select(User).where(User.clerkUserId == clerk_id)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db_budget = session.exec(select(Budget).where((Budget.userId == user.id) & (Budget.id == budget_id))).first()
+    if not db_budget:
+        raise HTTPException(status_code=404, detail="Budget not found")
+
+    response_data = {**db_budget.model_dump()}
+
+    transactions = session.exec(select(Transaction).where(Transaction.budgetId == db_budget.id)).all()
+    response_data["transactions"] = [transaction.model_dump() for transaction in transactions]
+     
+    return response_data
 
 def read_all_budgets(session: Session, clerk_id: str) -> BudgetListOut:
   count_statement = select(func.count(Budget.id)).select_from(Budget)
@@ -38,7 +49,6 @@ def read_all_budgets(session: Session, clerk_id: str) -> BudgetListOut:
           print(response_data)
       else:
           response_data.append(budget.model_dump())
-  print(response_data)
   return BudgetListOut(data=response_data, count=count)
 
 def delete_budget(session: Session, budget_id: int):

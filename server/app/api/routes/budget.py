@@ -8,8 +8,8 @@ from core.config import settings
 router = APIRouter()
 
 @router.get('/get/{budget_id}')
-def get_budget(session: SessionDep, budget_id: int, user_id: int):
-  return budgetController.read_budget(session, budget_id, user_id)
+def get_budget(session: SessionDep, budget_id: int, clerk_id: str):
+  return budgetController.read_budget(session, budget_id, clerk_id)
 
 @router.post('')
 def create_budget(session: SessionDep, budget: BudgetIn):

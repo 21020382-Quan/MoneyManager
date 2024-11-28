@@ -6,8 +6,9 @@ from core.config import settings
 from app.models.users import User
 from app.models.budgets import Budget
 
-def read_transaction(session: Session, user_id: int, transaction_id: int) -> TransactionOut:
-  db_transaction = session.exec(select(Transaction).where((Transaction.id == transaction_id) & (Transaction.userId == user_id))).first() 
+def read_transaction(session: Session, transaction_id: int, clerk_id: str) -> TransactionOut:
+  user = session.exec(select(User.id).where(User.clerkUserId == clerk_id)).first()
+  db_transaction = session.exec(select(Transaction).where((Transaction.id == transaction_id) & (Transaction.userId == user))).first() 
   if db_transaction is None:
     raise HTTPException(
       status_code=status.HTTP_404_NOT_FOUND,
@@ -29,7 +30,7 @@ def read_transaction(session: Session, user_id: int, transaction_id: int) -> Tra
 
   return response_data
 
-def read_all_transactions(session: Session, clerk_id: int) -> TransactionListOut:
+def read_all_transactions(session: Session, clerk_id: str) -> TransactionListOut:
   count_statement = select(func.count(Transaction.id)).select_from(Transaction)
   count = session.exec(count_statement).one()
 
