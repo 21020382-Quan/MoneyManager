@@ -32,5 +32,5 @@ def get_all_transactions_by_budget(session: SessionDep, budget_id: int) -> Trans
   return TransactionController.read_all_transactions_by_budget(session, budget_id)
 
 @router.get('/get_all_transactions_by_time')
-def get_all_transactions_by_time(session: SessionDep, clerkId: str) -> TransactionListOut: 
-  return TransactionController.readAllTransactionsByTime(session, clerkId)
+def get_all_transactions_by_time(session: SessionDep, clerkId: str, time: int) -> TransactionListOut: 
+  return TransactionController.readAllTransactionsByTime(session, clerkId, time)

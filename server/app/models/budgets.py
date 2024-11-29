@@ -21,6 +21,10 @@ class Budget(BudgetBase, table=True):
     def update_transaction_count(self):
         self.transaction = len(self.transactions)
 
+    def reset_amount_if_first_of_month(self):
+        if datetime.now().day == 1:
+            self.amount = 0
+
     class Config:
         from_attributes = True
 
