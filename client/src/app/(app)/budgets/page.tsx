@@ -32,6 +32,7 @@ export default function Budgets() {
 
         const data = await response.json();
         setBudgets(data.data);
+        console.log(data);
       } catch (error) {
         console.log(error);
         toast({
