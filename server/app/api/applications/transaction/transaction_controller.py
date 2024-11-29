@@ -25,38 +25,31 @@ def read_transaction(session: Session, transaction_id: int, clerk_id: str) -> Tr
     ).first()
     response_data = {
       **response_data,
-      "budget": db_budget.model_dump(),
+      "budgetName": db_budget.name,
     }
 
   return response_data
 
-def read_all_transactions(session: Session, clerk_id: str) -> TransactionListOut:
+def read_all_transactions(session: Session, clerkId: str) -> TransactionListOut:
   count_statement = select(func.count(Transaction.id)).select_from(Transaction)
   count = session.exec(count_statement).one()
 
-  user = session.exec(select(User).where(User.clerkUserId == clerk_id)).first()
+  user = session.exec(select(User).where(User.clerkUserId == clerkId)).first()
   db_transactions = session.exec(select(Transaction).where(Transaction.userId == user.id)).all()
   response_data = []
-  tr_list_id = [transaction.id for transaction in db_transactions if transaction.id]
-  db_list_transactions = session.exec(
-      select(Transaction).where(Transaction.id.in_(tr_list_id))
-  ).all()
-
-  list_transactions_map = {
-      transaction.id: transaction for transaction in db_list_transactions
-  }
-
-  for transaction in db_transactions:
-      if transaction.id:
-          response_data.append(
-              {
-                  **transaction.model_dump(),
-                  "transaction": list_transactions_map[transaction.id].model_dump(),
-              }
-          )
-          print(response_data)
-      else:
-          response_data.append(transaction.model_dump())
+  for data in db_transactions:
+    if data.budgetId: 
+      db_budget = session.exec(
+        select(Budget).where(
+          Budget.id == data.budgetId
+        )
+      ).first()
+      response_data.append(
+        {
+        **data.model_dump(),
+        "budgetName": db_budget.name,
+        }
+      )
   return TransactionListOut(data=response_data, count=count)
 
 def read_all_transactions_by_budget(session: Session, budget_id: int) -> TransactionListOut: 
@@ -106,10 +99,11 @@ def update_transaction(session: Session, transaction_id: int, data: TransactionI
 
   return db_transaction
 
-def create_transaction(
+def createTransaction(
     session: Session, data: TransactionIn
 ) -> Transaction:
     budget = session.exec(select(Budget).where(Budget.name == data.budget)).first()
+    budget.totalSpent += data.amount
     if not budget:
         raise HTTPException(status_code=404, detail="Budget not found")
 

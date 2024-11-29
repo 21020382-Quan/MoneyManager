@@ -11,8 +11,8 @@ def get_transaction(session: SessionDep, transaction_id: int, clerk_id: str):
   return TransactionController.read_transaction(session, transaction_id, clerk_id)
 
 @router.post('/')
-def create_transaction(session: SessionDep, data: TransactionIn):
-  return TransactionController.create_transaction(session, data)
+def createTransaction(session: SessionDep, data: TransactionIn):
+  return TransactionController.createTransaction(session, data)
 
 @router.delete('/delete/{transaction_id}')
 def delete_transaction(session: SessionDep, transaction_id: int):

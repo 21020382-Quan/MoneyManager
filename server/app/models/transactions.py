@@ -23,7 +23,7 @@ class TransactionOut(TransactionBase):
     id: int 
     description: str
     amount: int 
-    budget: BudgetOut
+    budgetName: str
 
 class TransactionIn(TransactionBase): 
     budget: str
@@ -31,6 +31,6 @@ class TransactionIn(TransactionBase):
     amount: int
 
 class TransactionListOut(SQLModel): 
-    data: list[Transaction]
+    data: list[TransactionOut]
     count: int
 

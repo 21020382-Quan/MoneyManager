@@ -18,9 +18,6 @@ class Budget(BudgetBase, table=True):
     userId: int = Field(default=None, foreign_key="user.id")
     user: "User" = Relationship(back_populates="budgets")
 
-    def update_transaction_count(self):
-        self.transaction = len(self.transactions)
-
     class Config:
         from_attributes = True
 
@@ -35,7 +32,6 @@ class BudgetIn(BudgetBase):
     icon: str
     name: str
     amount: int
-    clerkId: str
 
 class BudgetListOut(SQLModel): 
     data: list[Budget]
