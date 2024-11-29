@@ -127,14 +127,14 @@ def create_transaction(
 
     return transaction
 
-def readAllTransactionsByTime(session: Session, clerkId: str) -> TransactionListOut:
+def readAllTransactionsByTime(session: Session, clerkId: str, time: int) -> TransactionListOut:
     user = session.exec(select(User).where(User.clerkUserId == clerkId)).first()
     
     if not user:
         return TransactionListOut(data=[], count=0)  
 
     now = datetime.now()
-    start_time = now - timedelta(days=7)
+    start_time = now - timedelta(days=time)
 
     count_statement = select(func.count(Transaction.id)).where(Transaction.userId == user.id)
     count = session.exec(count_statement).one()

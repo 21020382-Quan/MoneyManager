@@ -24,6 +24,7 @@ class TransactionOut(TransactionBase):
     description: str
     amount: int 
     budgetName: str
+    date: datetime
 
 class TransactionIn(TransactionBase): 
     budget: str
