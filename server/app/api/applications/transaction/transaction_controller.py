@@ -1,4 +1,5 @@
 import base64
+from datetime import datetime, timedelta
 from fastapi import HTTPException, status
 from app.models.transactions import Transaction, TransactionIn, TransactionListOut, TransactionOut
 from sqlmodel import Session, select, func
@@ -25,7 +26,7 @@ def read_transaction(session: Session, transaction_id: int, clerk_id: str) -> Tr
     ).first()
     response_data = {
       **response_data,
-      "budget": db_budget.model_dump(),
+      "budgetName": db_budget.name,
     }
 
   return response_data
@@ -125,3 +126,32 @@ def create_transaction(
     session.refresh(transaction)
 
     return transaction
+
+def readAllTransactionsByTime(session: Session, clerkId: str) -> TransactionListOut:
+    user = session.exec(select(User).where(User.clerkUserId == clerkId)).first()
+    
+    if not user:
+        return TransactionListOut(data=[], count=0)  
+
+    now = datetime.now()
+    start_time = now - timedelta(days=7)
+
+    count_statement = select(func.count(Transaction.id)).where(Transaction.userId == user.id)
+    count = session.exec(count_statement).one()
+
+    dbTransactions = session.exec(
+        select(Transaction).where((Transaction.userId == user.id) & (Transaction.date >= start_time) & (Transaction.date <= now))
+    ).all()
+
+    response_data = []
+    for transaction in dbTransactions:
+        db_budget = session.exec(
+            select(Budget).where(Budget.id == transaction.budgetId)
+        ).first()
+
+        response_data.append({
+            **transaction.model_dump(),
+            "budgetName": db_budget.name if db_budget else None,
+        })
+
+    return TransactionListOut(data=response_data, count=count)
