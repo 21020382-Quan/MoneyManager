@@ -18,6 +18,7 @@ import EmojiPicker from 'emoji-picker-react';
 import { LucideEdit } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { EditBudgetFunction } from '../page';
+import { useUser } from '@clerk/nextjs';
 
 interface EditBudgetDialogProps {
   id: string;
@@ -34,6 +35,7 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, o
   const [amount, setAmount] = useState<number>(prevAmount);
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();
+  const { user } = useUser();
 
   const handleSelectEmoji = (e: { emoji: string }) => {
     setIcon(e.emoji);
@@ -61,7 +63,7 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, o
         name,
         amount
       };
-      const response = await fetch(`http://localhost:8081/api/v1/budget/put/${id}`, {
+      const response = await fetch(`http://localhost:8081/api/v1/budget/put/${id}?clerk_id=${user?.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +72,7 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, o
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Edit budget error! Status: ${response.status}`);
       }
 
       const newBudget = await response.json();

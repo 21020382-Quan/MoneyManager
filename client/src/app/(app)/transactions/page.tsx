@@ -2,10 +2,11 @@
 
 import { DataTable } from "@/components/ui/data-table";
 import TransactionDialog from "./_components/TransactionDialog";
-import { Transaction, columns } from "./columns";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
+import { BudgetItemInfo } from "../budgets/_components/BudgetItem";
+import { columns, Transaction } from "./columns";
 
 export type AddTransactionFunction = (newTransaction: Transaction) => void;
 export type EditTransactionFunction = (newTransaction: Transaction) => void;
@@ -13,14 +14,10 @@ export type DeleteTransactionFunction = (id: string) => void;
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>();
+  const [budgets, setBudgets] = useState<string[]>();
   const { toast } = useToast();
   const [error, setError] = useState(false);
   const { user } = useUser();
-  const budgets = [
-    'Shopping',
-    'Food',
-    'E-books'
-  ]
   useEffect(() => {
     if (!user) return;
     const fetchData = async () => {
@@ -33,7 +30,7 @@ export default function Transactions() {
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Get transactions error! Status: ${response.status}`);
         }
 
         const data = await response.json();
@@ -49,38 +46,39 @@ export default function Transactions() {
         });
         setError(true);
       }
+
+      try {
+        const response = await fetch(`http://localhost:8081/api/v1/budget/get_all_budgets/${user.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error(`Get budgets error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        setBudgets(data.data.map((budget: BudgetItemInfo) => {
+          return budget.name;
+        }))
+
+      } catch (error) {
+        toast({
+          title: `Failed to load page!`,
+          description: `${error}`,
+          duration: 3000,
+          className: "border-none bg-red-500 text-white",
+        });
+        setError(true);
+      }
     };
-    // const fetchData = async () => {
-    //   const data = [
-    //     {
-    //       id: "728ed52f",
-    //       budget: "Shopping",
-    //       description: "Lorem ipsum",
-    //       date: new Date("2024-10-27"),
-    //       amount: 1000000,
-    //     },
-    //     {
-    //       id: "489e1d42",
-    //       budget: "Memberships",
-    //       description: "Lorem ipsum",
-    //       date: new Date("2024-09-28"),
-    //       amount: 10000000,
-    //     },
-    //     {
-    //       id: "623ejh98e",
-    //       budget: "Food",
-    //       description: "Lorem ipsum",
-    //       date: new Date("2024-08-29"),
-    //       amount: 100000,
-    //     },
-    //     // ...
-    //   ];
-    //   setTransactions(data);
-    // }
     fetchData();
   }, [user])
   
-  if (error || transactions === undefined) {
+  if (error || !transactions || !budgets) {
     return (
       <div></div>
     )
@@ -100,7 +98,7 @@ export default function Transactions() {
     setTransactions((prevTransactions = []) => 
       prevTransactions.filter((transaction) => transaction.id !== newTransaction.id)
     );
-    setTransactions((prevTransactions = []) => [...prevTransactions, newTransaction])
+    setTransactions((prevTransactions = []) => [newTransaction, ...prevTransactions])
   }
 
   return (

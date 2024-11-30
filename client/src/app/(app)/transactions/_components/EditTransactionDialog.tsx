@@ -27,7 +27,6 @@ interface EditTransactionDialogProps {
 }
 
 export default function EditTransactionDialog({ id, prevBudget, prevDescription, prevAmount, onEdit }: EditTransactionDialogProps) {
-  const [budget, setBudget] = useState<string>(prevBudget);
   const [description, setDescription] = useState<string>(prevDescription);
   const [amount, setAmount] = useState<number>(prevAmount);
   const { toast } = useToast();
@@ -36,7 +35,7 @@ export default function EditTransactionDialog({ id, prevBudget, prevDescription,
     try {
       const request = { 
         id,
-        budget,
+        prevBudget,
         description,
         amount,
       };
@@ -49,7 +48,7 @@ export default function EditTransactionDialog({ id, prevBudget, prevDescription,
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Edit transaction error! Status: ${response.status}`);
       }
 
       const newTransaction = await response.json();
@@ -92,7 +91,7 @@ export default function EditTransactionDialog({ id, prevBudget, prevDescription,
               id="budget"
               placeholder="Budget"
               className="col-span-3"
-              value={budget}
+              value={prevBudget}
               disabled
             />
           </div>
@@ -125,7 +124,7 @@ export default function EditTransactionDialog({ id, prevBudget, prevDescription,
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              disabled={!(budget && description && amount) && (budget === prevBudget && amount === prevAmount && description === prevDescription)}
+              disabled={!(description && amount) || !(amount !== prevAmount || description !== prevDescription)}
               type="submit"
               className="hover:text-yellow-100 hover:bg-yellow-500 bg-yellow-500 border rounded-full"
               onClick={handleEditTransaction}

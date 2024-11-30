@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import APIRouter
 from api.deps import SessionDep
 import api.applications.transaction.transaction_controller as TransactionController
@@ -29,3 +30,7 @@ def get_all_transactions(session: SessionDep, clerk_id: str) -> TransactionListO
 @router.get('/get_all_transactions_by_budget/{budget_id}')
 def get_all_transactions_by_budget(session: SessionDep, budget_id: int) -> TransactionListOut: 
   return TransactionController.read_all_transactions_by_budget(session, budget_id)
+
+@router.get('/get_all_transactions_by_time')
+def get_all_transactions_by_time(session: SessionDep, clerkId: str, time: int) -> TransactionListOut: 
+  return TransactionController.readAllTransactionsByTime(session, clerkId, time)

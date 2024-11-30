@@ -18,6 +18,13 @@ class Budget(BudgetBase, table=True):
     userId: int = Field(default=None, foreign_key="user.id")
     user: "User" = Relationship(back_populates="budgets")
 
+    def update_transaction_count(self):
+        self.transaction = len(self.transactions)
+
+    def reset_amount_if_first_of_month(self):
+        if datetime.now().day == 1:
+            self.amount = 0
+
     class Config:
         from_attributes = True
 

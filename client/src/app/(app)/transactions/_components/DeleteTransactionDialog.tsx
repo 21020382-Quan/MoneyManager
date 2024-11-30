@@ -40,7 +40,7 @@ export default function DeleteTransactionDialog({ id, description, onDelete }: D
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Delete transaction error! Status: ${response.status}`);
       }
 
       const transaction = await response.json();

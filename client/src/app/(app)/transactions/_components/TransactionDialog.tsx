@@ -27,16 +27,16 @@ import { AddTransactionFunction } from '../page';
 interface TransactionDialogProps {
   onAddTransaction: AddTransactionFunction;
   budgets: string[];
+  inBudget?: boolean;
 }
 
 
-export default function TransactionDialog({ onAddTransaction, budgets } : TransactionDialogProps) {
-  const [budget, setBudget] = useState<string>();
+export default function TransactionDialog({ onAddTransaction, budgets, inBudget = false } : TransactionDialogProps) {
+  const [budget, setBudget] = useState<string>(inBudget ? budgets[0] : "");
   const [description, setDescription] = useState<string>('');
   const [amount, setAmount] = useState<number>(0);
   const {toast} = useToast();
   const handleCreateTransaction = async () => {
-    // TODO: send data to server
     const request = {
       budget,
       description,
@@ -60,7 +60,7 @@ export default function TransactionDialog({ onAddTransaction, budgets } : Transa
 
       onAddTransaction(newTransaction);
 
-      setBudget('');
+      if (!inBudget) setBudget('');
       setDescription('');
       setAmount(0);
       toast({
@@ -95,16 +95,25 @@ export default function TransactionDialog({ onAddTransaction, budgets } : Transa
             <Label htmlFor="budget" className="text-right">
               Budget:
             </Label>
-            <Select value={budget} onValueChange={setBudget}>
+            {inBudget ?
+            (<Input
+              id="budget"
+              placeholder="Budget"
+              className="col-span-3"
+              value={budgets[0]}
+              disabled
+            />) : 
+            (<Select value={budget} onValueChange={setBudget}>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select a budget" />
               </SelectTrigger>
+               :
               <SelectContent>
                 {budgets.map((budget, index) => (
                   <SelectItem value={budget} key={index}>{budget}</SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </Select>)}
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="description" className="text-right">

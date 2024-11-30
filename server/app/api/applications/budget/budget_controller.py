@@ -37,8 +37,6 @@ def readAllBudgets(session: Session, clerkId: str) -> BudgetListOut:
         budget_data = readBudget(session, budget.id, clerkId)
         response_data.append(budget_data)
 
-    print(response_data)
-
     return BudgetListOut(data=response_data, count=count)
 
 
