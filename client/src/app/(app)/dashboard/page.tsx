@@ -79,57 +79,56 @@ export default function Dashboard({ spendingRange }: DashboardInterface) {
     if (!user) return;
     const fetchData = async () => {
       try {
-        // Example data for testing
-        const budgetData = [
-          {
-            id: "1",
-            icon: "a",
-            name: "Shopping",
-            amount: 1000000,
-            totalSpent: 500000,
-            userId: "1",
-            transaction: [
-              {
-                id: "1",
-                description: "a",
-                date: new Date("2024/11/26"),
-                amount: 500000,
-              }
-            ]
-          },
-          {
-            id: "2",
-            icon: "b",
-            name: "Food",
-            amount: 2000000,
-            totalSpent: 500000,
-            userId: "2",
-            transaction: [
-              {
-                id: "2",
-                description: "b",
-                date: new Date("2024/11/26"),
-                amount: 500000,
-              }
-            ]
-          },
-          {
-            id: "3",
-            icon: "c",
-            name: "Membership",
-            amount: 500000,
-            totalSpent: 500000,
-            userId: "3",
-            transaction: [
-              {
-                id: "3",
-                description: "c",
-                date: new Date("2024/11/26"),
-                amount: 500000,
-              }
-            ]
-          },
-        ];
+        // const budgetData = [
+        //   {
+        //     id: "1",
+        //     icon: "a",
+        //     name: "Shopping",
+        //     amount: 1000000,
+        //     totalSpent: 500000,
+        //     userId: "1",
+        //     transaction: [
+        //       {
+        //         id: "1",
+        //         description: "a",
+        //         date: new Date("2024/11/26"),
+        //         amount: 500000,
+        //       }
+        //     ]
+        //   },
+        //   {
+        //     id: "2",
+        //     icon: "b",
+        //     name: "Food",
+        //     amount: 2000000,
+        //     totalSpent: 500000,
+        //     userId: "2",
+        //     transaction: [
+        //       {
+        //         id: "2",
+        //         description: "b",
+        //         date: new Date("2024/11/26"),
+        //         amount: 500000,
+        //       }
+        //     ]
+        //   },
+        //   {
+        //     id: "3",
+        //     icon: "c",
+        //     name: "Membership",
+        //     amount: 500000,
+        //     totalSpent: 500000,
+        //     userId: "3",
+        //     transaction: [
+        //       {
+        //         id: "3",
+        //         description: "c",
+        //         date: new Date("2024/11/26"),
+        //         amount: 500000,
+        //       }
+        //     ]
+        //   },
+        // ];
   
         const response = await fetch(`http://localhost:8081/api/v1/budget/get_all_budgets/${user.id}`, {
           method: "GET",
@@ -144,7 +143,7 @@ export default function Dashboard({ spendingRange }: DashboardInterface) {
   
         const data = await response.json();
   
-        setBudgets(data.data);
+        setBudgets(data);
         console.log(budgets);
         setError(false);
       } catch (error) {

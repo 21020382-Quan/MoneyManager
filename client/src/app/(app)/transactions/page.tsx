@@ -12,6 +12,13 @@ export type AddTransactionFunction = (newTransaction: Transaction) => void;
 export type EditTransactionFunction = (newTransaction: Transaction) => void;
 export type DeleteTransactionFunction = (id: string) => void;
 
+type TransactionData = {
+  id: string,
+  amount: number,
+  budgetName: string,
+  date: Date,
+}
+
 export default function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>();
   const [budgets, setBudgets] = useState<string[]>();
@@ -34,9 +41,14 @@ export default function Transactions() {
         }
 
         const data = await response.json();
-
         console.log(data);
-        setTransactions(data.data);
+
+        setTransactions(data.data.map((transaction: TransactionData) => {
+          return {
+            ...transaction,
+            budget: transaction.budgetName,
+          }
+        }));
       } catch (error) {
         toast({
           title: `Failed to load page!`,
@@ -61,7 +73,7 @@ export default function Transactions() {
 
         const data = await response.json();
 
-        setBudgets(data.data.map((budget: BudgetItemInfo) => {
+        setBudgets(data.map((budget: BudgetItemInfo) => {
           return budget.name;
         }))
 
