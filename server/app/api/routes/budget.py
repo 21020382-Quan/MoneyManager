@@ -7,22 +7,22 @@ from core.config import settings
 
 router = APIRouter()
 
-@router.get('/get/{budget_id}')
-def get_budget(session: SessionDep, budget_id: int, clerk_id: str):
-  return budgetController.read_budget(session, budget_id, clerk_id)
+@router.get('/get/{budgetId}')
+def get_budget(session: SessionDep, budgetId: int, clerkId: str):
+  return budgetController.readBudget(session, budgetId, clerkId)
 
 @router.post('')
-def create_budget(session: SessionDep, budget: BudgetIn):
-  return budgetController.create_budget(session, budget)
+def createBudget(session: SessionDep, budget: BudgetIn, clerkId: str):
+  return budgetController.createBudget(session, budget, clerkId)
 
-@router.get('/get_all_budgets/{clerk_id}')
-def get_all_budgets(session: SessionDep, clerk_id: str) -> BudgetListOut: 
-  return budgetController.read_all_budgets(session, clerk_id)
+@router.get('/get_all_budgets/{clerkId}')
+def get_all_budgets(session: SessionDep, clerkId: str) -> BudgetListOut: 
+  return budgetController.readAllBudgets(session, clerkId)
 
-@router.delete('/delete/{budget_id}')
-def delete_budget(session: SessionDep, budget_id: int):
-  return budgetController.delete_budget(session, budget_id)
+@router.delete('/delete/{budgetId}')
+def deleteBudget(session: SessionDep, budgetId: int, clerkId: str):
+  return budgetController.deleteBudget(session, budgetId, clerkId)
 
-@router.put('/put/{budget_id}')
-def update_budget(session: SessionDep, budget_id: int, budget: BudgetIn):
-  return budgetController.update_budget(session, budget_id, budget)
+@router.put('/put/{budgetId}')
+def updateBudget(session: SessionDep, budgetId: int, budget: BudgetIn, clerkId: str):
+  return budgetController.updateBudget(session, budgetId, budget, clerkId)
