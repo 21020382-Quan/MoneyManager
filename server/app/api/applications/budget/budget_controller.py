@@ -22,7 +22,7 @@ def readBudget(session: Session, budgetId: int, clerkId: str) -> Budget:
      
     return response_data
 
-def readAllBudgets(session: Session, clerkId: str) -> BudgetListOut:
+def readAllBudgets(session: Session, clerkId: str):
     count_statement = select(func.count(Budget.id)).select_from(Budget)
     count = session.exec(count_statement).one()
 
@@ -37,9 +37,7 @@ def readAllBudgets(session: Session, clerkId: str) -> BudgetListOut:
         budget_data = readBudget(session, budget.id, clerkId)
         response_data.append(budget_data)
 
-    return BudgetListOut(data=response_data, count=count)
-
-
+    return response_data
 
 def deleteBudget(session: Session, budgetId: int, clerkId: str) -> str:
     user = session.exec(select(User).where(User.clerkUserId == clerkId)).first()

@@ -16,7 +16,7 @@ def createBudget(session: SessionDep, budget: BudgetIn, clerkId: str):
   return budgetController.createBudget(session, budget, clerkId)
 
 @router.get('/get_all_budgets/{clerkId}')
-def get_all_budgets(session: SessionDep, clerkId: str) -> BudgetListOut: 
+def get_all_budgets(session: SessionDep, clerkId: str): 
   return budgetController.readAllBudgets(session, clerkId)
 
 @router.delete('/delete/{budgetId}')
