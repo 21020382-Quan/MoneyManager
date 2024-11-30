@@ -23,7 +23,8 @@ class TransactionOut(TransactionBase):
     id: int 
     description: str
     amount: int 
-    budgetName: str
+    date: datetime
+    budget: str
 
 class TransactionIn(TransactionBase): 
     budget: str

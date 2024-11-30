@@ -26,7 +26,7 @@ def read_transaction(session: Session, transaction_id: int, clerk_id: str) -> Tr
     ).first()
     response_data = {
       **response_data,
-      "budgetName": db_budget.name,
+      "budget": db_budget.name,
     }
 
   return response_data
@@ -48,7 +48,7 @@ def read_all_transactions(session: Session, clerkId: str) -> TransactionListOut:
       response_data.append(
         {
         **data.model_dump(),
-        "budgetName": db_budget.name,
+        "budget": db_budget.name,
         }
       )
   return TransactionListOut(data=response_data, count=count)
