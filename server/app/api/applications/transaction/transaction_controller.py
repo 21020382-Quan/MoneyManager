@@ -83,6 +83,8 @@ def read_all_transactions_by_budget(session: Session, budget_id: int) -> Transac
 
 def delete_transaction(session: Session, transaction_id: int):
   db_transaction = session.get(Transaction, transaction_id)
+  budget = session.exec(select(Budget).where(Budget.id == db_transaction.budgetId)).first()
+  budget.totalSpent -= db_transaction.amount
   if not db_transaction:
     raise HTTPException(status_code=404, detail="Transaction not found")
   session.delete(db_transaction)
@@ -111,7 +113,6 @@ def createTransaction(
     transaction = Transaction(
         budget=budget,
         userId=budget.userId,
-        budgetName=budget.name, 
         description=data.description,
         amount=data.amount,
     )
@@ -133,6 +134,9 @@ def readAllTransactionsByTime(session: Session, clerkId: str, time: int) -> Tran
     count_statement = select(func.count(Transaction.id)).where(Transaction.userId == user.id)
     count = session.exec(count_statement).one()
 
+    if time == 0: 
+       return read_all_transactions(session, clerkId)
+
     dbTransactions = session.exec(
         select(Transaction).where((Transaction.userId == user.id) & (Transaction.date >= start_time) & (Transaction.date <= now))
     ).all()
@@ -145,7 +149,7 @@ def readAllTransactionsByTime(session: Session, clerkId: str, time: int) -> Tran
 
         response_data.append({
             **transaction.model_dump(),
-            "budgetName": db_budget.name if db_budget else None,
+            "budget": db_budget.name if db_budget else None,
         })
 
     return TransactionListOut(data=response_data, count=count)
