@@ -58,8 +58,8 @@ export default function BudgetItem({budget, link} : BudgetProps) {
           </div>
           <div className="w-full bg-secondary h-2 rounded-full mt-2">
             <div 
-              className={`${budget.totalSpent / budget.amount > 0.8 ? "text-red-500" : "text-blue-500"} h-2 rounded-full`}
-              style={{ width: `${(Math.max(budget.totalSpent || 0, budget.amount)) / budget.amount}`}}>
+              className={`${budget.totalSpent / budget.amount > 0.8 ? "bg-red-500" : "bg-blue-500"} h-2 rounded-full`}
+              style={{ width: `${(Math.min(budget.totalSpent || 0, budget.amount)) / budget.amount * 100}%`}}>
             </div>
           </div>
         </div>

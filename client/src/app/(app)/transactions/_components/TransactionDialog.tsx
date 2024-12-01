@@ -23,18 +23,20 @@ import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { AddTransactionFunction } from '../page';
+import { BudgetItemInfo } from '../../budgets/_components/BudgetItem';
 
 interface TransactionDialogProps {
   onAddTransaction: AddTransactionFunction;
-  budgets: string[];
+  budgets: BudgetItemInfo[];
   inBudget?: boolean;
 }
 
 
 export default function TransactionDialog({ onAddTransaction, budgets, inBudget = false } : TransactionDialogProps) {
-  const [budget, setBudget] = useState<string>(inBudget ? budgets[0] : "");
+  const [budget, setBudget] = useState<string>(inBudget ? budgets[0].name : "");
   const [description, setDescription] = useState<string>('');
   const [amount, setAmount] = useState<number>(0);
+
   const {toast} = useToast();
   const handleCreateTransaction = async () => {
     const request = {
@@ -100,17 +102,16 @@ export default function TransactionDialog({ onAddTransaction, budgets, inBudget 
               id="budget"
               placeholder="Budget"
               className="col-span-3"
-              value={budgets[0]}
+              value={budgets[0].name}
               disabled
             />) : 
             (<Select value={budget} onValueChange={setBudget}>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select a budget" />
               </SelectTrigger>
-               :
               <SelectContent>
                 {budgets.map((budget, index) => (
-                  <SelectItem value={budget} key={index}>{budget}</SelectItem>
+                  <SelectItem value={budget.name} key={index}>{budget.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>)}
@@ -142,6 +143,21 @@ export default function TransactionDialog({ onAddTransaction, budgets, inBudget 
           </div>
         </div>
         <DialogFooter>
+        {budget && budgets.some((b) => b.name === budget) && (
+          <>
+            {(() => {
+              const selectedBudget = budgets.find((b) => b.name === budget);
+              if (selectedBudget) {
+                const exceedsBudget = amount + selectedBudget.totalSpent > selectedBudget.amount;
+                return exceedsBudget ? (
+                  <h2 className="text-red-500 text-sm font-semibold">
+                    This transaction will exceed the budget limit!
+                  </h2>
+                ) : <></>;
+              }
+            })()}
+          </>
+        )}
           <DialogClose asChild>
             <Button
               disabled={!(budget && description && amount)}

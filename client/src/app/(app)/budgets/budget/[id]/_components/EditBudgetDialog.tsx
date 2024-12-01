@@ -57,13 +57,14 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, o
 
   const handleEditBudget = async () => {
     try {
+      if (!user) throw new Error("Error: User is not logged in!")
       const request = { 
         id,
         icon,
         name,
         amount
       };
-      const response = await fetch(`http://localhost:8081/api/v1/budget/put/${id}?clerk_id=${user?.id}`, {
+      const response = await fetch(`http://localhost:8081/api/v1/budget/put/${id}?clerkId=${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

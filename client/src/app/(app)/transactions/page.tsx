@@ -21,96 +21,90 @@ type TransactionData = {
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>();
-  const [budgets, setBudgets] = useState<string[]>();
+  const [budgets, setBudgets] = useState<BudgetItemInfo[]>();
   const { toast } = useToast();
   const [error, setError] = useState(false);
   const { user } = useUser();
+  const fetchTransactionsData = async () => {
+    if (!user) return
+    try {
+      const response = await fetch(`http://localhost:8081/api/v1/transaction/get_all_transactions/${user.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Get transactions error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      setTransactions(data.data.map((transaction: TransactionData) => {
+        return {
+          ...transaction,
+          budget: transaction.budgetName,
+        }
+      }));
+    } catch (error) {
+      toast({
+        title: `Failed to load page!`,
+        description: `${error}`,
+        duration: 3000,
+        className: "border-none bg-red-500 text-white",
+      });
+      setError(true);
+    }
+  }
+  const fetchBudgetsData = async () => {
+    if (!user) return
+    try {
+      const response = await fetch(`http://localhost:8081/api/v1/budget/get_all_budgets/${user.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error(`Get budgets error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      setBudgets(data);
+
+    } catch (error) {
+      toast({
+        title: `Failed to load page!`,
+        description: `${error}`,
+        duration: 3000,
+        className: "border-none bg-red-500 text-white",
+      });
+      setError(true);
+    }
+  }
   useEffect(() => {
-    if (!user) return;
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8081/api/v1/transaction/get_all_transactions/${user.id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Get transactions error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log(data);
-
-        setTransactions(data.data.map((transaction: TransactionData) => {
-          return {
-            ...transaction,
-            budget: transaction.budgetName,
-          }
-        }));
-      } catch (error) {
-        toast({
-          title: `Failed to load page!`,
-          description: `${error}`,
-          duration: 3000,
-          className: "border-none bg-red-500 text-white",
-        });
-        setError(true);
-      }
-
-      try {
-        const response = await fetch(`http://localhost:8081/api/v1/budget/get_all_budgets/${user.id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error(`Get budgets error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        setBudgets(data.map((budget: BudgetItemInfo) => {
-          return budget.name;
-        }))
-
-      } catch (error) {
-        toast({
-          title: `Failed to load page!`,
-          description: `${error}`,
-          duration: 3000,
-          className: "border-none bg-red-500 text-white",
-        });
-        setError(true);
-      }
-    };
-    fetchData();
+    fetchBudgetsData();
+    fetchTransactionsData();
   }, [user])
   
-  if (error || !transactions || !budgets) {
-    return (
-      <div></div>
-    )
+  if (error || transactions === undefined || budgets === undefined) {
+    return <h1 className="font-bold text-3xl">Error loading</h1>
   }
 
-  const addTransaction: AddTransactionFunction = (newTransaction) => {
-    setTransactions((prevTransactions = []) => [...prevTransactions, newTransaction])
+  const addTransaction: AddTransactionFunction = async (newTransaction) => {
+    fetchTransactionsData();
   }
 
   const deleteTransaction: DeleteTransactionFunction = (id) => {
-    setTransactions((prevTransactions = []) =>
-      prevTransactions.filter((transaction) => transaction.id !== id)
-    );
+    fetchTransactionsData();
   };
 
   const editTransaction: EditTransactionFunction = (newTransaction) => {
-    setTransactions((prevTransactions = []) => 
-      prevTransactions.filter((transaction) => transaction.id !== newTransaction.id)
-    );
-    setTransactions((prevTransactions = []) => [newTransaction, ...prevTransactions])
+    fetchTransactionsData();
   }
 
   return (

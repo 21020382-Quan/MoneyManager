@@ -31,7 +31,7 @@ export default function Budget({ params } : ParamsProps) {
   const fetchData = async () => {
     if (!user) return;
     try {
-      const response = await fetch(`http://localhost:8081/api/v1/budget/get/${params.id}?clerk_id=${user.id}`, {
+      const response = await fetch(`http://localhost:8081/api/v1/budget/get/${params.id}?clerkId=${user.id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -70,8 +70,8 @@ export default function Budget({ params } : ParamsProps) {
     }
   }, [budget]);
 
-  if (error || !budget) {
-    return <div></div>;
+  if (error || budget === undefined) {
+    return <h1 className="font-bold text-3xl">Loading page...</h1>
   }
 
   const editBudget: EditBudgetFunction = (newBudget) => {
@@ -114,7 +114,7 @@ export default function Budget({ params } : ParamsProps) {
         <span className="font-bold">Transactions</span>
         <DataTable columns={columns({editTransaction, deleteTransaction})} data={transactions} />
       </div>
-      <TransactionDialog onAddTransaction={addTransaction} budgets={[budget.name]} inBudget={true} />
+      <TransactionDialog onAddTransaction={addTransaction} budgets={[budget]} inBudget={true} />
     </div>
   );
 }
