@@ -61,6 +61,7 @@ export default function Budget({ params } : ParamsProps) {
 
   useEffect(() => {
     if (budget) {
+      console.log(budget);
       setTransactions(
         budget.transactions.map((transaction) => ({
           ...transaction,
@@ -74,27 +75,19 @@ export default function Budget({ params } : ParamsProps) {
     return <h1 className="font-bold text-3xl">Loading page...</h1>
   }
 
-  const editBudget: EditBudgetFunction = (newBudget) => {
-    setBudget(newBudget);
+  const editBudget: EditBudgetFunction = async (newBudget) => {
+    await fetchData();
   };
 
   const addTransaction: AddTransactionFunction = async (newTransaction) => {
-    setTransactions((prevTransactions = []) => [...prevTransactions, newTransaction])
     await fetchData();
   }
 
   const deleteTransaction: DeleteTransactionFunction = async (id) => {
-    setTransactions((prevTransactions = []) =>
-      prevTransactions.filter((transaction) => transaction.id !== id)
-    );
     await fetchData();
   };
 
   const editTransaction: EditTransactionFunction = async (newTransaction) => {
-    setTransactions((prevTransactions = []) => 
-      prevTransactions.filter((transaction) => transaction.id !== newTransaction.id)
-    );
-    setTransactions((prevTransactions = []) => [newTransaction, ...prevTransactions]);
     await fetchData();
   };
 
