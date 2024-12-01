@@ -1,4 +1,5 @@
 import base64
+from collections import defaultdict
 from datetime import datetime, timedelta
 from fastapi import HTTPException, status
 from app.models.transactions import Transaction, TransactionIn, TransactionListOut, TransactionOut
@@ -53,34 +54,6 @@ def read_all_transactions(session: Session, clerkId: str) -> TransactionListOut:
       )
   return TransactionListOut(data=response_data, count=count)
 
-def read_all_transactions_by_budget(session: Session, budget_id: int) -> TransactionListOut: 
-  count_statement = select(func.count(Transaction.id)).select_from(Transaction)
-  count = session.exec(count_statement).one()
-  
-  db_transactions = session.exec(select(Transaction).where(Transaction.budgetId == budget_id)).all()
-  response_data = []
-  tr_list_id = [transaction.id for transaction in db_transactions if transaction.id]
-  db_list_transactions = session.exec(
-      select(Transaction).where(Transaction.id.in_(tr_list_id))
-  ).all()
-
-  list_transactions_map = {
-      transaction.id: transaction for transaction in db_list_transactions
-  }
-
-  for transaction in db_transactions:
-      if transaction.id:
-          response_data.append(
-              {
-                  **transaction.model_dump(),
-                  "transaction": list_transactions_map[transaction.id].model_dump(),
-              }
-          )
-          print(response_data)
-      else:
-          response_data.append(transaction.model_dump())
-  return TransactionListOut(data=response_data, count=count)
-
 def delete_transaction(session: Session, transaction_id: int):
   db_transaction = session.get(Transaction, transaction_id)
   budget = session.exec(select(Budget).where(Budget.id == db_transaction.budgetId)).first()
@@ -93,6 +66,9 @@ def delete_transaction(session: Session, transaction_id: int):
 
 def update_transaction(session: Session, transaction_id: int, data: TransactionIn) -> Transaction:
   db_transaction = session.get(Transaction, transaction_id)
+  amount = db_transaction.amount
+  budget = session.exec(select(Budget).where(Budget.id == db_transaction.budgetId)).first()
+  budget.totalSpent = budget.totalSpent + amount - db_transaction.amount
   if not db_transaction:
     raise HTTPException(status_code=404, detail="Transaction not found") 
   db_transaction.sqlmodel_update(data.model_dump(exclude_unset=True))
@@ -122,7 +98,7 @@ def createTransaction(
 
     return transaction
 
-def readAllTransactionsByTime(session: Session, clerkId: str, time: int) -> TransactionListOut:
+def readAllTransactionsByTime(session: Session, clerkId: str, time: int):
     user = session.exec(select(User).where(User.clerkUserId == clerkId)).first()
     
     if not user:
@@ -135,21 +111,42 @@ def readAllTransactionsByTime(session: Session, clerkId: str, time: int) -> Tran
     count = session.exec(count_statement).one()
 
     if time == 0: 
-       return read_all_transactions(session, clerkId)
+       return readAllTransactionsByDay(session, clerkId)
 
     dbTransactions = session.exec(
         select(Transaction).where((Transaction.userId == user.id) & (Transaction.date >= start_time) & (Transaction.date <= now))
     ).all()
 
-    response_data = []
+    grouped_transactions = defaultdict(list)
     for transaction in dbTransactions:
-        db_budget = session.exec(
-            select(Budget).where(Budget.id == transaction.budgetId)
-        ).first()
+        transaction_date = transaction.date.date()
+        grouped_transactions[transaction_date].append(transaction)
 
-        response_data.append({
-            **transaction.model_dump(),
-            "budget": db_budget.name if db_budget else None,
-        })
+    response_data = []
+    for transaction_date, daily_transactions in grouped_transactions.items():
+        combined_transaction = {
+            "date": transaction_date,
+            "amount": sum(t.amount for t in daily_transactions), 
+        }
+        response_data.append(combined_transaction)
 
-    return TransactionListOut(data=response_data, count=count)
+    return response_data
+
+def readAllTransactionsByDay(session: Session, clerkId: str):
+    user = session.exec(select(User).where(User.clerkUserId == clerkId)).first()
+    transactions = session.exec(select(Transaction).where(Transaction.userId == user.id)).all()
+
+    grouped_transactions = defaultdict(list)
+    for transaction in transactions:
+        transaction_date = transaction.date.date()
+        grouped_transactions[transaction_date].append(transaction)
+
+    response_data = []
+    for transaction_date, daily_transactions in grouped_transactions.items():
+        combined_transaction = {
+            "date": transaction_date,
+            "amount": sum(t.amount for t in daily_transactions), 
+        }
+        response_data.append(combined_transaction)
+
+    return response_data

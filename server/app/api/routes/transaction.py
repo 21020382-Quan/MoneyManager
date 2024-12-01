@@ -27,10 +27,10 @@ def update_transaction(session: SessionDep, transaction_id: int, transaction: Tr
 def get_all_transactions(session: SessionDep, clerk_id: str) -> TransactionListOut: 
   return TransactionController.read_all_transactions(session, clerk_id)
 
-@router.get('/get_all_transactions_by_budget/{budget_id}')
-def get_all_transactions_by_budget(session: SessionDep, budget_id: int) -> TransactionListOut: 
-  return TransactionController.read_all_transactions_by_budget(session, budget_id)
-
 @router.get('/get_all_transactions_by_time')
-def get_all_transactions_by_time(session: SessionDep, clerkId: str, time: int) -> TransactionListOut: 
+def get_all_transactions_by_time(session: SessionDep, clerkId: str, time: int): 
   return TransactionController.readAllTransactionsByTime(session, clerkId, time)
+
+@router.get('/get_all_transactions_by_day/{clerkId}')
+def get_all_transactions_by_day(session: SessionDep, clerkId: str):
+  return TransactionController.readAllTransactionsByDay(session, clerkId)
