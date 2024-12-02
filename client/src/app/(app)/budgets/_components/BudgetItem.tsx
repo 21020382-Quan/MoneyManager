@@ -20,15 +20,15 @@ export type BudgetItemInfo = {
   transactions: Transaction[];
 };
 
-interface BudgetProps extends React.HTMLAttributes<HTMLDivElement> {
+interface BudgetProps {
   budget: BudgetItemInfo;
   link?: string;
 };
 
-export default function BudgetItem({budget, link, className} : BudgetProps) {
+export default function BudgetItem({budget, link} : BudgetProps) {
   const content = (
     <Card>
-      <div className={cn("p-4 w-full h-40 flex flex-col justify-between", className)}>
+      <div className="p-4 w-full h-40 flex flex-col justify-between">
         <div className="flex items-center justify-between">
           <div className="flex gap-2 items-center max-w-[150px] overflow-clip">
             <div className="p-2 bg-secondary rounded-full text-xl">
@@ -52,12 +52,14 @@ export default function BudgetItem({budget, link, className} : BudgetProps) {
         <div className="mt-4">
           <div className="flex items-center justify-between">
             <p className="text-slate-500"></p>
-            <p className="text-slate-500 text-xs">{toLocalMoney(budget.amount - (budget.totalSpent || 0))} remaining</p>
+            <p className={`${budget.totalSpent / budget.amount > 0.8 ? "text-red-500" : "text-slate-500"} text-xs`}>
+              {toLocalMoney(budget.amount - (budget.totalSpent || 0))} remaining
+            </p>
           </div>
-          <div className="w-full bg-secondary h-2 rounded-full">
+          <div className="w-full bg-secondary h-2 rounded-full mt-2">
             <div 
-              className="bg-blue-500 h-2 rounded-full" 
-              style={{ width: `${(budget.totalSpent || 0) / budget.amount}`}}>
+              className={`${budget.totalSpent / budget.amount > 0.8 ? "text-red-500" : "text-blue-500"} h-2 rounded-full`}
+              style={{ width: `${(Math.max(budget.totalSpent || 0, budget.amount)) / budget.amount}`}}>
             </div>
           </div>
         </div>

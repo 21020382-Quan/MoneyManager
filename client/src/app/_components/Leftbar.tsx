@@ -29,11 +29,6 @@ export default function Leftbar() {
       link: '/transactions',
       title: 'Transactions',
     },
-    {
-      icon: Target,
-      link: '/plan',
-      title: 'Plan',
-    },
   ];
 
   return (
