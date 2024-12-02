@@ -7,6 +7,8 @@ from sqlmodel import Session, select, func
 from core.config import settings
 from app.models.users import User
 from app.models.budgets import Budget
+import requests
+from bs4 import BeautifulSoup
 
 def read_transaction(session: Session, transaction_id: int, clerk_id: str) -> TransactionOut:
   user = session.exec(select(User.id).where(User.clerkUserId == clerk_id)).first()
@@ -150,3 +152,30 @@ def readAllTransactionsByDay(session: Session, clerkId: str):
         response_data.append(combined_transaction)
 
     return response_data
+
+def scrape_evn_pricing():
+    url = "https://www.evn.com.vn/c3/evn-va-khach-hang/Bieu-gia-ban-dien-9-76.aspx"
+    try:
+        # Gửi yêu cầu HTTP GET đến trang web
+        response = requests.get(url)
+        response.raise_for_status()  # Kiểm tra lỗi HTTP
+        soup = BeautifulSoup(response.content, "html.parser")
+        
+        # Tìm nội dung của bảng giá
+        tables = soup.find_all("table")  # Tìm tất cả bảng trên trang
+        if not tables:
+            return {"error": "Không tìm thấy bảng trên trang"}
+
+        # Ví dụ: lấy dữ liệu từ bảng đầu tiên
+        table = tables[0]
+        rows = table.find_all("tr")  # Lấy tất cả các hàng trong bảng
+
+        # Chuyển dữ liệu bảng thành danh sách
+        data = []
+        for row in rows:
+            cells = row.find_all(["td", "th"])  # Lấy các ô dữ liệu
+            data.append([cell.get_text(strip=True) for cell in cells])
+
+        return {"url": url, "pricing_table": data}
+    except requests.exceptions.RequestException as e:
+        return {"error": str(e)}
