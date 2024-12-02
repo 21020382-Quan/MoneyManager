@@ -11,3 +11,5 @@ python-multipart==0.0.9
 pre-commit==3.8.0
 openpyxl==3.1.5
 prisma==0.15.0
+requests==2.32.3
+beautifulsoup4==4.12.3
