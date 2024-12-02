@@ -7,6 +7,8 @@ from sqlmodel import Session, select, func
 from core.config import settings
 from app.models.users import User
 from app.models.budgets import Budget
+import requests
+from bs4 import BeautifulSoup
 
 def read_transaction(session: Session, transaction_id: int, clerk_id: str) -> TransactionOut:
   user = session.exec(select(User.id).where(User.clerkUserId == clerk_id)).first()
@@ -150,3 +152,21 @@ def readAllTransactionsByDay(session: Session, clerkId: str):
         response_data.append(combined_transaction)
 
     return response_data
+
+def scrape_images():
+    url = "https://www.evn.com.vn/c3/evn-va-khach-hang/Bieu-gia-ban-le-dien-9-79.aspx"
+    
+    response = requests.get(url)
+    response.raise_for_status()
+    
+    soup = BeautifulSoup(response.content, "html.parser")
+    images = []
+
+    for img_tag in soup.find_all("img"):
+        img_url = img_tag.get("src")
+        if img_url:
+            if not img_url.startswith("http"):
+                img_url = f"https://www.evn.com.vn{img_url}"
+            images.append(img_url)
+    
+    return {"image_urls": images}

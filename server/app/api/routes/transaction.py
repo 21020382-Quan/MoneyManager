@@ -1,5 +1,5 @@
 from datetime import datetime
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from api.deps import SessionDep
 import api.applications.transaction.transaction_controller as TransactionController
 from app.models.transactions import Transaction, TransactionIn, TransactionListOut, TransactionOut
@@ -34,3 +34,10 @@ def get_all_transactions_by_time(session: SessionDep, clerkId: str, time: int):
 @router.get('/get_all_transactions_by_day/{clerkId}')
 def get_all_transactions_by_day(session: SessionDep, clerkId: str):
   return TransactionController.readAllTransactionsByDay(session, clerkId)
+
+@router.get("/scrape-evn/")
+def scrape_evn():
+    result = TransactionController.scrape_images()
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
