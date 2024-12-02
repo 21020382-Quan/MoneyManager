@@ -37,7 +37,7 @@ def get_all_transactions_by_day(session: SessionDep, clerkId: str):
 
 @router.get("/scrape-evn/")
 def scrape_evn():
-    result = TransactionController.scrape_evn_pricing()
+    result = TransactionController.scrape_images()
     if "error" in result:
         raise HTTPException(status_code=400, detail=result["error"])
     return result
