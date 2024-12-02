@@ -59,6 +59,10 @@ export default function Leftbar() {
           label: 'Foreign currency price',
           link: '/foreignCurrencyPrice',
         },
+        {
+          label: 'Electricity price',
+          link: '/electricityPrice',
+        },
       ],
     },
   ];

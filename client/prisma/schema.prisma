@@ -28,6 +28,7 @@ model transaction {
   date        DateTime @db.Timestamp(6)
   amount      Int?
   budgetId    Int
+  userId      Int?
   budget      budget   @relation(fields: [budgetId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 

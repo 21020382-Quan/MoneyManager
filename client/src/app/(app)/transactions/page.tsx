@@ -80,7 +80,7 @@ export default function Transactions() {
   }, [user])
   
   if (error || transactions === undefined || budgets === undefined) {
-    return <h1 className="font-bold text-3xl">Loading page...</h1>
+    return <div></div>
   }
 
   const addTransaction: AddTransactionFunction = async (newTransaction) => {

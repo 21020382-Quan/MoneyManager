@@ -72,7 +72,7 @@ export default function Budget({ params } : ParamsProps) {
   }, [budget]);
 
   if (error || budget === undefined) {
-    return <h1 className="font-bold text-3xl">Loading page...</h1>
+    return <div></div>
   }
 
   const editBudget: EditBudgetFunction = async (newBudget) => {

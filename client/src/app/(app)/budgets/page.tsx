@@ -49,7 +49,7 @@ export default function Budgets() {
   }, [user]);
 
   if (error || budgets === undefined) {
-    return <h1 className="font-bold text-3xl">Loading page...</h1>
+    return <div></div>
   }
   
   const addBudget: AddBudgetFunction = (newBudget) => {

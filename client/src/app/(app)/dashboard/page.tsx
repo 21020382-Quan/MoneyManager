@@ -42,7 +42,6 @@ export default function Dashboard({ spendingRange }: DashboardInterface) {
       }
 
       const data = await response.json();
-
       setBudgets(data);
       setError(false);
     } catch (error) {
@@ -95,8 +94,7 @@ export default function Dashboard({ spendingRange }: DashboardInterface) {
   }, [user]);
 
   if (error || spendings === undefined || budgets === undefined) {
-    console.log(error, spendings, budgets);
-    return <h1 className="font-bold text-3xl">Loading page...</h1>
+    return <div></div>
   }
 
   return (
