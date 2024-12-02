@@ -1,6 +1,6 @@
 "use client"
 
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { rangeOptions, toLocalMoney } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -12,11 +12,16 @@ interface ChartProps {
 }
 
 export default function AllBudgetsBarChart({budgets} : ChartProps) {
+  const colors = ["#EF4444", "#3B82F6", "#6B7280"]
   const data = budgets.map((budget) => {
+    const remaining = Math.max(budget.amount - budget.totalSpent, 0)
+    const totalSpent = budget.totalSpent
+    const isCritical = totalSpent / (remaining + totalSpent) >= 0.8
     return {
-      totalSpent: budget.totalSpent,
-      remaining: budget.amount - budget.totalSpent,
+      totalSpent,
+      remaining,
       name: budget.name,
+      isCritical,
     }
   })
   return (
@@ -32,8 +37,15 @@ export default function AllBudgetsBarChart({budgets} : ChartProps) {
             <YAxis tickFormatter={tick => toLocalMoney(tick)} />
             <Tooltip formatter={value => toLocalMoney(value as number)} />
             <Legend />
-            <Bar dataKey="totalSpent" stackId="a" fill="#2196F3" name="Total spent" />
-            <Bar dataKey="remaining" stackId="a" fill="#9E9E9E" name="Remaining" />
+            <Bar dataKey="totalSpent" stackId="a" name="Total spent">
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.isCritical ? colors[0] : colors[1]}
+                />
+              ))}
+            </Bar>
+            <Bar dataKey="remaining" stackId="a" fill={colors[2]} name="Remaining" />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

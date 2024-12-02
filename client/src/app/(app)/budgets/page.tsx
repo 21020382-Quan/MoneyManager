@@ -31,8 +31,7 @@ export default function Budgets() {
         }
 
         const data = await response.json();
-        setBudgets(data.data);
-        console.log(data);
+        setBudgets(data);
       } catch (error) {
         console.log(error);
         toast({
@@ -46,10 +45,11 @@ export default function Budgets() {
     };
 
     fetchData();
+    console.log(user);
   }, [user]);
 
   if (error || budgets === undefined) {
-    return <div></div>;
+    return <div></div>
   }
   
   const addBudget: AddBudgetFunction = (newBudget) => {

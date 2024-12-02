@@ -60,7 +60,7 @@ export default function BudgetDialog({onAddBudget}: BudgetDialogProps) {
         amount,
         clerkId: user.id,
      }
-      const response = await fetch("http://localhost:8081/api/v1/budget", {  
+      const response = await fetch(`http://localhost:8081/api/v1/budget?clerkId=${user.id}`, {  
         method: "POST",
         headers: {
           "Content-Type": "application/json",

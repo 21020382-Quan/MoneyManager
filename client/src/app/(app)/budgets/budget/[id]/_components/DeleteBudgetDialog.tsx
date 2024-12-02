@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
+import { useUser } from '@clerk/nextjs';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { LucideTrash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -22,14 +23,16 @@ interface DeleteBudgetDialogProps {
 
 export default function DeleteBudgetDialog({ id, name }: DeleteBudgetDialogProps) {
   const { toast } = useToast();
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
+  const { user } = useUser();
 
   const handleDeleteBudget = async () => {
     try {
+      if (!user) throw new Error("Error: User is not logged in!")
       const request = {
         id,
       }
-      const response = await fetch(`http://localhost:8081/api/v1/budget/delete/${id}`, {
+      const response = await fetch(`http://localhost:8081/api/v1/budget/delete/${id}?clerkId=${user.id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

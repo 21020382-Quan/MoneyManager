@@ -21,20 +21,24 @@ export const rangeOptions = {
     label: "Last 7 days",
     startDate: startOfDay(subDays(new Date(), 6)),
     endDate: endOfDay(new Date()),
+    time: 7,
   },
   lastMonth: {
     label: "Last 30 days",
     startDate: startOfDay(subDays(new Date(), 29)),
     endDate: endOfDay(new Date()),
+    time: 30,
   },
   lastYear: {
     label: "Last 365 days",
     startDate: startOfDay(subDays(new Date(), 364)),
     endDate: endOfDay(new Date()),
+    time: 365,
   },
   allTime: {
     label: "All time",
     startDate: null,
     endDate: endOfDay(new Date()),
+    time: 0,
   }
 }

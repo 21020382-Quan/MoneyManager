@@ -51,7 +51,7 @@ export const columns = ({ editTransaction, deleteTransaction }: ColumnProps): Co
     ),
     cell: ({ row }) => {
       const date = new Date(row.getValue("date"));
-      const formatted = date.toLocaleDateString("vi-VN") + " " + date.toLocaleTimeString("vi-VN"); 
+      const formatted = date.toLocaleDateString("vi-VN"); 
       return <div className="font-medium">{formatted}</div>
     },
   },
@@ -71,22 +71,28 @@ export const columns = ({ editTransaction, deleteTransaction }: ColumnProps): Co
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
+      const rowDate = new Date(row.original.date);
+      const currentDate = new Date();
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <div className="flex flex-col gap-2">
-              <EditTransactionDialog id={row.original.id} prevBudget={row.original.budget} prevDescription={row.original.description} prevAmount={row.original.amount} onEdit={editTransaction} />
-              <DeleteTransactionDialog id={row.original.id} description={row.original.description} onDelete={deleteTransaction} />
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        rowDate.getMonth() === currentDate.getMonth() && rowDate.getFullYear() === currentDate.getFullYear() ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <div className="flex flex-col gap-2">
+                <EditTransactionDialog id={row.original.id} prevBudget={row.original.budget} prevDescription={row.original.description} prevAmount={row.original.amount} onEdit={editTransaction} />
+                <DeleteTransactionDialog id={row.original.id} description={row.original.description} onDelete={deleteTransaction} />
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <></>
+        )
       )
     },
   },
