@@ -16,7 +16,7 @@ export default function AllSpendingsChart({spendings} : ChartProps) {
   const data = spendings.map((spending) => {
     return {
       value: spending.amount,
-      date: spending.date.toDateString(),
+      date: spending.date,
     }
   })
   const searchParams = useSearchParams();
