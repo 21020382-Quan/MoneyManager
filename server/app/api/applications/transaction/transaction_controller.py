@@ -70,7 +70,7 @@ def update_transaction(session: Session, transaction_id: int, data: TransactionI
   db_transaction = session.get(Transaction, transaction_id)
   amount = db_transaction.amount
   budget = session.exec(select(Budget).where(Budget.id == db_transaction.budgetId)).first()
-  budget.totalSpent = budget.totalSpent + amount - db_transaction.amount
+  budget.totalSpent = budget.totalSpent - amount + data.amount
   if not db_transaction:
     raise HTTPException(status_code=404, detail="Transaction not found") 
   db_transaction.sqlmodel_update(data.model_dump(exclude_unset=True))
