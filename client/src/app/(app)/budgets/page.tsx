@@ -45,7 +45,6 @@ export default function Budgets() {
     };
 
     fetchData();
-    console.log(user);
   }, [user]);
 
   if (error || budgets === undefined) {

@@ -70,70 +70,73 @@ export default function EditTransactionDialog({ id, prevBudget, prevDescription,
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className="flex flex-row gap-2 hover:bg-secondary p-2 hover:cursor-pointer">
-          <LucideEdit />
-          <span>Edit</span>
-        </div>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit '{prevDescription}' transaction</DialogTitle>
-          <DialogDescription>Update the information of this Transaction</DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-        <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="budget" className="text-right">
-              Budget:
-            </Label>
-            <Input
-              id="budget"
-              placeholder="Budget"
-              className="col-span-3"
-              value={prevBudget}
-              disabled
-            />
+    <div data-testid="edit-transaction-dialog">
+      <Dialog>
+        <DialogTrigger asChild>
+          <div className="flex flex-row gap-2 hover:bg-secondary p-2 hover:cursor-pointer" data-testid="edit-dialog-trigger">
+            <LucideEdit />
+            <span>Edit</span>
           </div>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit '{prevDescription}' transaction</DialogTitle>
+            <DialogDescription>Update the information of this Transaction</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="description" className="text-right">
-              Description:
-            </Label>
-            <Input
-              id="description"
-              placeholder="Description"
-              className="col-span-3"
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
-            />
+              <Label htmlFor="budget" className="text-right">
+                Budget:
+              </Label>
+              <Input
+                id="budget"
+                placeholder="Budget"
+                className="col-span-3"
+                value={prevBudget}
+                disabled
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">
+                Description:
+              </Label>
+              <Input
+                id="description"
+                placeholder="Description"
+                className="col-span-3"
+                onChange={(e) => setDescription(e.target.value)}
+                value={description}
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="amount" className="text-right">
+                Amount:
+              </Label>
+              <Input
+                type="number"
+                id="amount"
+                placeholder="Amount"
+                className="col-span-3"
+                onChange={(e) => setAmount(Number(e.target.value))}
+                value={amount || ''}
+              />
+            </div>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="amount" className="text-right">
-              Amount:
-            </Label>
-            <Input
-              type="number"
-              id="amount"
-              placeholder="Amount"
-              className="col-span-3"
-              onChange={(e) => setAmount(Number(e.target.value))}
-              value={amount || ''}
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              disabled={!(description && amount) || !(amount !== prevAmount || description !== prevDescription)}
-              type="submit"
-              className="hover:text-yellow-100 hover:bg-yellow-500 bg-yellow-500 border rounded-full"
-              onClick={handleEditTransaction}
-            >
-              Edit
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button
+                disabled={!(description && amount) || !(amount !== prevAmount || description !== prevDescription)}
+                type="submit"
+                className="hover:text-yellow-100 hover:bg-yellow-500 bg-yellow-500 border rounded-full"
+                onClick={handleEditTransaction}
+                data-testid="edit-dialog-submit"
+              >
+                Edit
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

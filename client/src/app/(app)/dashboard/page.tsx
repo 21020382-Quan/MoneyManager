@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
-import AllSpendingsChart from "./_components/AllTransactionsChart";
 import { BudgetItemInfo } from "../budgets/_components/BudgetItem";
-import AllBudgetsBarChart from "./_components/AllBudgetsChart";
-import AllBudgetsPercentageChart from "./_components/AllBudgetsPercentageChart";
 import { rangeOptions } from "@/lib/utils";
+import AllSpendingsChart from "./_components/AllSpendingsChart";
+import AllBudgetsBarChart from "./_components/AllBudgetsBarChart";
+import AllBudgetsPercentageChart from "./_components/AllBudgetsPercentageChart";
 
 export type Spending = {
   date: Date;

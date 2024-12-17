@@ -62,30 +62,33 @@ export default function DeleteTransactionDialog({ id, description, onDelete }: D
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-      <div className="flex flex-row gap-2 hover:bg-secondary p-2 hover:cursor-pointer">
-        <LucideTrash />
-        <span>Delete</span>
-      </div>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Delete '{description}' transaction</DialogTitle>
-          <DialogDescription>Do you want to delete this transaction? <br/> Once this action is finished, it cannot be reverted.</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              className="hover:text-red-100 hover:bg-red-500 bg-red-500 border rounded-full"
-              onClick={handleDeleteTransaction}
-            >
-              Delete
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <div data-testid="delete-transaction-dialog">
+      <Dialog>
+        <DialogTrigger asChild>
+        <div className="flex flex-row gap-2 hover:bg-secondary p-2 hover:cursor-pointer" data-testid="delete-dialog-trigger">
+          <LucideTrash />
+          <span>Delete</span>
+        </div>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Delete '{description}' transaction</DialogTitle>
+            <DialogDescription>Do you want to delete this transaction? <br/> Once this action is finished, it cannot be reverted.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                className="hover:text-red-100 hover:bg-red-500 bg-red-500 border rounded-full"
+                onClick={handleDeleteTransaction}
+                data-testid="delete-dialog-submit"
+              >
+                Delete
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

@@ -61,7 +61,6 @@ export default function Budget({ params } : ParamsProps) {
 
   useEffect(() => {
     if (budget) {
-      console.log(budget);
       setTransactions(
         budget.transactions.map((transaction) => ({
           ...transaction,

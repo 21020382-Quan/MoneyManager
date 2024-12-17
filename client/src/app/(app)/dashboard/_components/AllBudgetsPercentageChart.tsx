@@ -10,7 +10,6 @@ interface ChartProps {
 }
 
 export default function AllBudgetsPercentageChart({budgets} : ChartProps) {
-  console.log(budgets);
   const data = budgets.map((budget) => {
     return {
       amount: budget.amount,
@@ -28,24 +27,26 @@ export default function AllBudgetsPercentageChart({budgets} : ChartProps) {
     return `${(percent * 100).toFixed(1)}%`
   }
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>All budgets (percentage)</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={400}>
-          <PieChart margin={{left: 20, top: 20, bottom: 20, right: 20}}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <Pie dataKey="amount" data={data} fill="#2196F3" label={renderCustomizedLabel}>
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-            ))}
-            </Pie>
-            <Tooltip formatter={value => toLocalMoney(value as number)} />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      </CardContent>
-    </Card>
+    <div data-testid="all-budgets-percentage-chart">
+      <Card>
+        <CardHeader>
+          <CardTitle>All budgets (percentage)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart margin={{left: 20, top: 20, bottom: 20, right: 20}}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <Pie dataKey="amount" data={data} fill="#2196F3" label={renderCustomizedLabel}>
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+              ))}
+              </Pie>
+              <Tooltip formatter={value => toLocalMoney(value as number)} />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

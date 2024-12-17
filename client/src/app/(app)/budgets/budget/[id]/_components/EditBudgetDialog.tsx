@@ -104,73 +104,77 @@ export default function EditBudgetDialog({ id, prevIcon, prevName, prevAmount, o
   }, [openEmoji]);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button 
-          className="min-w-32 w-full bg-yellow-500 hover:bg-yellow-500 font-bold text-lg h-full"
-        >
-          <LucideEdit />
-          <span>Edit</span>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit '{prevName}' budget</DialogTitle>
-          <DialogDescription>Update the information of this budget</DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="icon" className="text-right">
-              Icon:
-            </Label>
-            <Button variant="outline" onClick={openEmojiPicker}>
-              {icon}
-            </Button>
-            {openEmoji && (
-              <div className="absolute top-10" ref={emojiPickerRef}>
-                <EmojiPicker className="z-10" onEmojiClick={handleSelectEmoji} />
-              </div>
-            )}
+    <div data-testid="edit-budget-dialog">
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button 
+            className="min-w-32 w-full bg-yellow-500 hover:bg-yellow-500 font-bold text-lg h-full"
+            data-testid="edit-dialog-trigger"
+          >
+            <LucideEdit />
+            <span>Edit</span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit '{prevName}' budget</DialogTitle>
+            <DialogDescription>Update the information of this budget</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="icon" className="text-right">
+                Icon:
+              </Label>
+              <Button variant="outline" onClick={openEmojiPicker}>
+                {icon}
+              </Button>
+              {openEmoji && (
+                <div className="absolute top-10" ref={emojiPickerRef}>
+                  <EmojiPicker className="z-10" onEmojiClick={handleSelectEmoji} />
+                </div>
+              )}
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Name:
+              </Label>
+              <Input
+                id="name"
+                placeholder="Budget Name"
+                className="col-span-3"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="amount" className="text-right">
+                Amount:
+              </Label>
+              <Input
+                type="number"
+                id="amount"
+                placeholder="Budget amount"
+                className="col-span-3"
+                onChange={(e) => setAmount(Number(e.target.value))}
+                value={amount || ''}
+              />
+            </div>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name:
-            </Label>
-            <Input
-              id="name"
-              placeholder="Budget Name"
-              className="col-span-3"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="amount" className="text-right">
-              Amount:
-            </Label>
-            <Input
-              type="number"
-              id="amount"
-              placeholder="Budget amount"
-              className="col-span-3"
-              onChange={(e) => setAmount(Number(e.target.value))}
-              value={amount || ''}
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              disabled={!(name && amount && icon) || (name === prevName && amount === prevAmount && icon === prevIcon)}
-              type="submit"
-              className="hover:bg-yellow-500 bg-yellow-500 border rounded-full"
-              onClick={handleEditBudget}
-            >
-              Edit
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button
+                disabled={!(name && amount) || (name === prevName && amount === prevAmount)}
+                type="submit"
+                className="hover:bg-yellow-500 bg-yellow-500 border rounded-full"
+                onClick={handleEditBudget}
+                data-testid="edit-dialog-submit"
+              >
+                Edit
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
