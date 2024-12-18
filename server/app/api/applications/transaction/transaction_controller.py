@@ -154,7 +154,7 @@ def readAllTransactionsByDay(session: Session, clerkId: str):
     return response_data
 
 def scrape_images():
-    url = "https://www.evn.com.vn/c3/evn-va-khach-hang/Bieu-gia-ban-le-dien-9-79.aspx"
+    url = "https://www.evn.com.vn/d/vi-VN/news/Bieu-gia-ban-le-dien-theo-QD-2941-BCT-ngay-8112023-60-3566-8503"
     
     response = requests.get(url)
     response.raise_for_status()
